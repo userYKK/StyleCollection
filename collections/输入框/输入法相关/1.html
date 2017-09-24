@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        body{
+            imeMode:disabled
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            bindBtn();
+            bind();
+
+            setime();
+        });
+
+        //===========================输入法的监听================================
+
+        function bind(){
+            $('#indiv').on('keyup','#in',function(e){
+                if(e.keyCode == 13){
+//                    $('#show').html($(this).val());
+                    $('#inBtn').click();
+                }
+            });
+        }
+        function bindBtn(){
+            $('#indiv').on('click','#inBtn',function(e){
+                $('#show').html($('#in').val());
+            })
+        }
+
+        //===========================输入框中禁止输入法================================
+
+        function setime(){
+            document.body.style.imeMode = 'disabled';
+//            $('input[name=number]').eq(0).css('imeMode','disabled');
+        }
+
+    </script>
+</head>
+<body>
+<fieldset>
+    <legend>输入法的监听---失败</legend>
+    <p><label style="color: red">
+        windows中： keyup/keydown 事件被输入法劫持，那么输入法中enter不会触发dom节点的事件<br>
+        linux 中： keydown事件被输入法劫持,所以 keyup事件在输入法enter的同时会被触发
+    </label></p>
+    <div id="indiv" style="width: 300px;height: 200px;background-color: gainsboro">
+        <input type="text" placeholder="输入框" id="in" /><input type="button" value="+" id="inBtn">
+    </div>
+    <div id="show">
+
+    </div>
+</fieldset>
+<fieldset>
+    <legend>输入法状态禁止字母汉字---oninput事件</legend>
+    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/g,'')" oninput="this.value=this.value.replace(/[^0-9]+/g,'')">
+</fieldset>
+<fieldset>
+    <legend>输入框中禁止输入法 --- IE 浏览器试用 </legend>
+    css 禁止：<input value="" style="ime-mode:disabled" />
+    js 进行禁止 <input name="number" value=""/>
+</fieldset>
+<fieldset>
+    <legend>禁止黏贴，禁止拖拽，禁止右键菜单，禁止中文输入法, 这种方法是最强的禁止 中文输入</legend>
+    <input type="text" oncopy="return false" onpaste="return false" ondragenter="return false" oncontextmenu="return false;" style="ime-mode:disabled"/>
+</fieldset>
+</body>
+</html>

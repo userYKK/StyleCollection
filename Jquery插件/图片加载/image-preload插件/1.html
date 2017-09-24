@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+    <title>Demo</title>
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/jquery.imgpreload.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('#status, #domstatus').append('<li> dom ready </li>');
+        });
+
+        // cache buster 
+        var t = (new Date).getTime();//获得当前时间
+
+        //新建一个数组，然后将要加载的图片地址推入这个数组中；
+        var the_images = [];
+
+        the_images.push('imgs/1.jpg?i=1');
+        the_images.push('imgs/2.jpg?i=2');
+        the_images.push('imgs/3.jpg?i=3');
+        the_images.push('imgs/4.jpg?i=4');
+        the_images.push('imgs/5.jpg?i=5');
+
+        var imgNum = 0; //计算加载的进度
+
+        /*
+            each 就是遍历dom 中所有的img 标签，内部是使用  image 对象进行预加载
+            all 就是所有的 img 标签处理完以后
+            $(this).data('loaded') 去判断图片是否加载完毕
+          */
+        jQuery.imgpreload(the_images,{
+
+            //开始运行预加载；
+            each: function() {
+                //each的意思是，每次加载完一个图片后，执行此匿名函数中的代码，本例仅仅是将图片的地址打印到页面而已，所以大家不用纠结“为什么没有看到图片”
+
+                console.info($(this));
+                //匹配 url 中的 i 的参数
+                var pattern = new RegExp( "i=(\\d)", "gi" );
+
+                var m = pattern.exec($(this).attr('src'));
+
+                // 图片加载的状态
+                var status = $(this).data('loaded')?'success':'error';
+
+                //打印出 预加载的 image 的 url和 i 参数值
+                $('#status').append('<li>' + m[1] + ': ' + $(this).attr('src') + ' ' + status + '</li>');
+
+                //额外添加的加载的进度
+                if (status == "success") {
+                    var v = (parseFloat(++imgNum) / the_images.length).toFixed(2);
+                    console.info(v);
+                    $("#number1").html(Math.round(v * 100) + "<sup>%</sup>");
+                }
+
+            },
+            all: function() {
+                //all的意思是，当所有图片加载完毕之后，执行此函数体内的内容；举个例子，如果有5张图片需要预加载，则each中的function会执行5次，而all的function 只会执行一次~
+                $('#status').append('<li> all images loaded </li>');
+                imgNum = 0;
+            }
+        });
+
+    </script>
+</head>
+<body>
+
+<h3>Status:<span id="number1"></span></h3>
+
+<ul id="status"></ul>
+
+<h3>In-dom status:</h3>
+
+<ul id="domstatus"></ul>
+
+<div id="images" style="display:block;">
+    <script type="text/javascript">
+
+        // 这里就是直接使用上面的 images 数组的时候，就不再重新去请求url
+        var t = (new Date).getTime();
+
+        var icnt = the_images.length;
+
+        for (var i=0; i < icnt; i++) {
+            the_images[i] = the_images[i].replace(/t=\d*/gi, 't=' + t);
+            document.write('<img src="' + the_images[i] + '" alt="" width="20px" height="20px" />');
+        }
+
+    </script>
+</div>
+
+<script type="text/javascript">
+
+    jQuery(function($) {
+        //这是第二次进行加载，就不需要在进行url的请求了，直接获取的是缓存的
+        $('#images img').imgpreload({
+
+            each: function()
+            {
+                var pattern = new RegExp( "i=(\\d)", "gi" );
+
+                var m = pattern.exec($(this).attr('src'));
+
+                var status = $(this).data('loaded')?'success':'error';
+
+                $('#domstatus').append('<li>' + m[1] + ': ' + $(this).attr('src') + ' ' + status +'</li>');
+
+                $(this).addClass('image-loaded');
+            },
+            all: function() {
+                $('#domstatus').append('<li> all images loaded </li>');
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

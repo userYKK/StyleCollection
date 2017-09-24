@@ -1,0 +1,144 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+
+    display: flex;
+}
+
+div[class*=wrapper] {
+    height: 100%;
+    width: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+div[class*=loader] {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+/*
+=======================
+    Square Preloader
+=======================
+*/
+.first-wrapper {
+    background-color: #0EB1D2;
+}
+
+.square {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255,255,255,0);
+    margin-right: auto;
+    margin-left: auto;
+    border: 2px solid #fff;
+    left: 73px;
+    top: 73px;
+    position: absolute;
+}
+
+.square-loader {
+    transform: rotate(45deg);
+}
+
+.first_square {
+    animation: first_square_animate 1s infinite ease-in-out;
+}
+.second_square {
+    animation: second_square 1s forwards,
+    second_square_animate 1s infinite ease-in-out;
+}
+.third_square {
+    animation: third_square 1s forwards,
+    third_square_animate 1s infinite ease-in-out;
+}
+
+@keyframes second_square {
+    100% { width: 100px; height:100px; left: 48px; top: 48px; }
+}
+
+@keyframes third_square {
+    100% { width: 150px; height:150px; left: 23px; top: 23px;}
+}
+
+@keyframes first_square_animate {
+    0%   { transform: perspective(100px) rotateX(0deg) rotateY(0deg);}
+    50%  { transform: perspective(100px) rotateX(-180deg) rotateY(0deg); }
+    100% { transform: perspective(100px) rotateX(-180deg) rotateY(-180deg); }
+}
+
+@keyframes second_square_animate {
+    0%   { transform: perspective(200px) rotateX(0deg) rotateY(0deg); }
+    50%  { transform: perspective(200px) rotateX(180deg) rotateY(0deg); }
+    100% { transform: perspective(200px) rotateX(180deg) rotateY(180deg); }
+}
+
+@keyframes third_square_animate {
+    0%   { transform: perspective(300px) rotateX(0deg) rotateY(0deg); }
+    50%  { transform: perspective(300px) rotateX(-180deg) rotateY(0deg); }
+    100% { transform: perspective(300px) rotateX(-180deg) rotateY(-180deg); }
+}
+
+
+/*
+=======================
+   Circle Preloader
+=======================
+*/
+.second-wrapper {
+    background-color: #17607d;
+}
+
+.circle-loader {
+    position: relative;
+}
+
+.circle {
+    border-radius: 50% 50% 50% 50%;
+    position: absolute;
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid transparent;
+    border-left:  2px solid #fff;
+    border-right: 2px solid transparent;
+    animation: animate 2s infinite;
+}
+
+.circle_one {
+    left: 75px;
+    top: 75px;
+    width: 50px;
+    height: 50px;
+}
+
+.circle_two {
+    left: 65px;
+    top: 65px;
+    width: 70px;
+    height: 70px;
+    animation-delay: 0.2s;
+}
+
+.circle_three {
+    left: 55px;
+    top: 55px;
+    width: 90px;
+    height: 90px;
+    animation-delay: 0.4s;
+}
+
+.circle_four {
+    left: 45px;
+    top: 45px;
+    width: 110px;
+    height: 110px;
+    animation-delay: 0.6s;
+}
+
+@keyframes animate {
+    50% { transform: rotate(360deg) scale(0.8); }
+}

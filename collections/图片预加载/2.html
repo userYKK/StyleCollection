@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<style>
+    ul {
+        margin: 0 auto;
+        padding: 0;
+        width: 500px;
+        list-style: none;
+    }
+    .lazy {
+        margin-bottom: 50px;
+        width: 500px;
+        height: 500px;
+        text-align: center;
+        line-height: 168px; /*垂直居中*/
+    }
+    img{
+        width: 500px;
+        height: 500px;
+        margin: 5px;
+        border: 1px solid red;
+    }
+</style>
+<body>
+<ul>
+    <li class='lazy'><img data-original='imgs/1.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/2.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/3.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/4.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/5.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/6.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/7.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/8.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/9.jpg'  src='imgs/loading.gif'/></li>
+    <li class='lazy'><img data-original='imgs/10.jpg' src='imgs/loading.gif'/></li>
+</ul>
+<script>
+
+    var hehe = true;
+    init();
+    function init() {
+        var images = document.images;
+        // 加载首屏图片
+        console.info('图片的数量：' + images.length);
+        for (var i = 0, len = images.length; i < len; i++) {
+            var obj = images[i];
+/*
+
+            console.info('第' + i + '个 img --------------------------------------');
+            console.info(images);
+            console.info(obj.getBoundingClientRect().top);
+            console.info(document.documentElement.clientHeight);
+            console.info(obj.isLoad);
+            console.info(obj.isShow);
+*/
+
+            // 如果在可视区域并且还没被加载过
+            //document.documentElement.clientHeight 浏览器可见区域的高度
+            if(obj.getBoundingClientRect().top < document.documentElement.clientHeight && !obj.isLoad) {
+//                console.info("第 1 个----");
+                obj.isLoad = true;
+                // 先调用 HTML5 方法
+//                console.info(obj.dataset);
+                if (obj.dataset) {
+                    imageLoaded(obj, obj.dataset.original);
+                }else {
+                    imageLoaded(obj, obj.getAttribute('data-original'));
+                }
+            } else {
+//                console.info("第 2 个----");
+                break;
+            }
+        }
+    }
+    window.onscroll = function() {
+        //自己测试 滚动一次的效果
+    /*    if(hehe){
+            lazyload();
+        }
+        hehe = false;*/
+        lazyload();
+    };
+
+    function lazyload() {
+        var lazy = 500;
+        var images = document.images;
+
+        for (var i = 0, len = images.length; i < len; i++) {
+            var obj = images[i];
+
+            console.info('第' + i + '个 img --------------------------------------');
+            console.info(images);
+            console.info(obj.getBoundingClientRect().top);
+            console.info(document.documentElement.clientHeight);
+            console.info(obj.isLoad);
+            console.info(obj.isShow);
+
+            if (obj.getBoundingClientRect().top - lazy < document.documentElement.clientHeight && !obj.isLoad) {
+                obj.isLoad = true;
+                obj.style.cssText = "transition: ''; opacity: 0;";
+
+                console.info('进入第一个----------');
+                console.info(obj.dataset);
+                
+                if (obj.dataset)
+                    imageLoaded(obj, obj.dataset.original);
+                else
+                    imageLoaded(obj, obj.getAttribute('data-original'));
+            }
+
+
+            if (obj.getBoundingClientRect().top < document.documentElement.clientHeight && !obj.isShow) {
+                console.info('进入第二个-----')
+                obj.isShow = true;
+                //图片显示时候进行 透明度的转换
+                obj.style.cssText = "transition: 1s; opacity: 1;"
+            }
+        }
+    }
+    function imageLoaded(obj, src) {
+        var img = new Image();
+        img.onload = function() {
+            obj.src = src;
+        };
+        img.src = src;
+    }
+</script>
+</body>
+</html>

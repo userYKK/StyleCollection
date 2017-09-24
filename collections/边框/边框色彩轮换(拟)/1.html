@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>流动异彩的html5表单登录框</title>
+<link type="text/css" rel="stylesheet" charset="utf-8" href="css/1.css"/>
+<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+$(function(){
+	var $form_inputs =   $('form input');
+	var $rainbow_and_border = $('.rain, .border');
+	
+	$form_inputs.bind('focus', function(){
+		$rainbow_and_border.addClass('end').removeClass('unfocus start');
+	});
+	$form_inputs.bind('blur', function(){
+		$rainbow_and_border.addClass('unfocus start').removeClass('end');
+	});
+	$form_inputs.first().delay(800).queue(function(){
+		$(this).focus();
+	});
+});
+</script>
+</head>
+
+<body>
+
+<div class="rain">
+    <div class="border start">
+        <form>
+            <label for="email">Email</label>
+            <input name="email" type="text" placeholder="Email"/>
+            <label for="pass">Password</label>
+            <input name="pass" type="password" placeholder="Password"/>
+            <input type="submit" value="LOG IN"/>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="css/2.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../../js/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            bindChk();
+        });
+        function showChk(){
+            var count = $('.chk:checked').length;
+            console.info(count);
+        };
+
+        var go = false;
+
+        function bindChk(){
+            $('.chk + label').bind('mousedown',function(e){
+                e.preventDefault();
+                //如果当前有绑定的，不能让check,  mousedown 点击时候不算当前这个checkbox
+                var count = $('.chk:checked').length;
+                console.info(count);
+                if(count > 0){//不能被点击并且改变
+//                    $(this).prev('.chk').prop('checked',false);
+                    go = false;
+                }else{
+                    go = true;
+                }
+            });
+
+            $('.chk').bind('click',function(){
+                console.info($(this).prop('checked'));
+                // 对 checkbox的click 事件是 checkbox 状态改变以后
+                if($(this).prop('checked')){
+                    return go;
+                }else {
+                    return true;
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="context">
+    <div class="container">
+        <div class="holder" style="background: white;">
+            <div class="center" style="width: 180px;">
+                <input type="checkbox" class="chk" id="checkbox-10-1" /><label for="checkbox-10-1"></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="holder" style="background: white;">
+            <div class="center" style="width: 180px;">
+                <input type="checkbox" class="chk" id="checkbox-11-1" /><label for="checkbox-11-1"></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="holder" style="background: white;">
+            <div class="center" style="width: 180px;">
+                <input type="checkbox"  class="chk" id="checkbox-12-1" /><label for="checkbox-12-1"></label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <input type="button" value="查看选中了几个" onclick="showChk()">
+</div>
+</body>
+</html>

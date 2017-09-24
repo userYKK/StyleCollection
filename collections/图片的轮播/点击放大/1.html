@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fancyBox - Fancy jQuery Lightbox Alternative | Demonstration</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<!-- Add jQuery library -->
+	<!--<script type="text/javascript" src="lib/jquery-1.10.1.min.js"></script>-->
+	<script type="text/javascript" src="lib/jquery.1.7.2.js"></script>
+	<!-- Add fancyBox main JS and CSS files -->
+	<script type="text/javascript" src="source/jquery.fancybox.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="source/jquery.fancybox.css?v=2.1.5" media="screen" />
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			/*
+			 *  Simple image gallery. Uses default settings
+			 */
+
+			$('.fancybox').fancybox();
+
+			/*
+			 *  Different effects
+			 */
+
+			// Change title type, overlay closing speed
+			$(".fancybox-effects-a").fancybox({
+				helpers: {
+					title : {
+						type : 'outside'
+					},
+					overlay : {
+						speedOut : 0
+					}
+				}
+			});
+
+		});
+	</script>
+	<style type="text/css">
+		.fancybox-custom .fancybox-skin {
+			box-shadow: 0 0 50px #222;
+		}
+
+		body {
+			max-width: 700px;
+			margin: 0 auto;
+		}
+	</style>
+</head>
+<body>
+<style>
+ul#bcty365_nav{padding-left:50px; margin-bottom:10px; border-bottom:2px solid #ccc; overflow:hidden; _zoom:1;}
+ul#bcty365_nav li{float:left; display:inline; margin:10px;}
+ul#bcty365_nav li a{display:block; font-size:16px;}
+ul#bcty365_nav li a,#wimoban_p,#wimoban_p a{color:#000; font-family:"微软雅黑";}
+ul#bcty365_nav li a:hover,#wimoban_p a:hover{color:red;}
+</style>	
+	<p>
+		<a class="fancybox" href="demo/1_b.jpg" data-fancybox-group="gallery" title="Lorem ipsum dolor sit amet"><img src="demo/1_s.jpg" alt="" /></a>
+
+		<a class="fancybox" href="demo/2_b.jpg" data-fancybox-group="gallery" title="Etiam quis mi eu elit temp"><img src="demo/2_s.jpg" alt="" /></a>
+
+		<a class="fancybox" href="demo/3_b.jpg" data-fancybox-group="gallery" title="Cras neque mi, semper leon"><img src="demo/3_s.jpg" alt="" /></a>
+
+		<a class="fancybox" href="demo/4_b.jpg" data-fancybox-group="gallery" title="Sed vel sapien vel sem uno"><img src="demo/4_s.jpg" alt="" /></a>
+	</p>
+</body>
+</html>

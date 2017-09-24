@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+
+        .ipInput-border{
+            border:1px #E3E9EF solid;
+            width:250px;
+            font-size:9pt;
+            margin-left: 20px;
+        }
+        .ipInput-cell{
+            width:40px;
+            height:34px;
+            border-width:0px;
+            border-style:none;
+            text-align:center;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/newInput_ip.js"></script>
+    <script type="text/javascript" src="js/inputSelection.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('#ip_div').ipInput('IP');
+        });
+    </script>
+</head>
+<body>
+<div id="ip_div">
+
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="css/perfect-scrollbar.css" rel="stylesheet" />
+    <style type="text/css">
+        #content{
+            width: 300px;
+            height: 400px;
+            border: 1px solid red;
+            position:relative;
+        }
+        #ms{
+            width: 95%;
+            border: 1px solid green;
+            margin: 0 auto;
+        }
+    </style>
+    <script type="text/javascript" src="../../js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/perfect-scrollbar.jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var len = 1000;
+            for (var i = 0; i < len; i++) {
+                var p = '<p> ' + i + '</p>';
+                $('#ms').append(p);
+            }
+
+            scroll_init();
+        });
+
+        //滚动条的初始化
+        function scroll_init(){
+            // 滚动的初始化是在父类元素，必须保证父类元素是 相对定位的
+            $('#content').perfectScrollbar();
+            /*
+                 容器大小或者位置变化
+                    $('#content').perfectScrollbar('update');
+                 销毁
+                    $('#content').perfectScrollbar('destroy');
+                 滚动到某一个特定位置
+                     $('#content').scrollTop(0);
+                     $('#content').perfectScrollbar('update');
+             */
+        }
+
+        function go(){
+            var len = $('input[name=len]').eq(0).val();
+            $('#content').scrollTop(len);
+//            $('#content').perfectScrollbar('update');
+        }
+
+    </script>
+</head>
+<body>
+<input type="text" name="len"/>
+<input type="button" value="点击点位" onclick="go()">
+<div id="content">
+    <div id="ms">
+    </div>
+</div>
+</body>
+</html>

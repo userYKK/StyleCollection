@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.core.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.mouse.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.draggable.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            clickPro();
+            dragPro();
+        });
+
+        function go(item){
+            //获取 audio的 dom 对象，不是 jquery对象---可以使用js做，不需要jquery框架
+            var _audio  = $('#audio').get(0);
+            switch(item){
+                case 'load':
+                    _audio.load();
+                    break;
+                case 'play':
+                    _audio.play();
+                    break;
+                case 'pause':
+                    _audio.pause();
+                    break;
+                case 'canPlayType':
+                    var result = _audio.canPlayType('audio/mp3');
+                    console.info(result);
+                    break;
+            }
+        }
+
+        //设置声音-- 获取当前的声音，然后+或者- 操作
+        function setVo(val){
+            var _audio  = $('#audio').get(0);
+            var _now = _audio.volume + val;
+            console.info(_now);
+            if(_now>=0.0 && _now <=1.0){
+                _audio.volume = _now;
+                console.info(_audio.volume);
+            }else{
+                alert("越界");
+            }
+        }
+
+        var _listen;
+        var _lisTime = 500;//毫秒
+        var _go = false;//开关 false表示没有播放
+        //开启监听进度条
+        function listenPro(){
+            var _audio  = $('#audio').get(0);
+            //如果是切换音乐，需要load下
+//            _audio.load();
+            //开启
+            if(_go){
+                _go = false;
+                _audio.pause();
+            }else{
+                _go = true;
+                _audio.play();
+            }
+            console.info(_audio.paused);
+            //开启监听，进行时间，进度的获取（进度就是时间来算的）
+            //如果是被暂停，那么点击以后需要开启
+            if(_audio.paused){
+                clearInterval(_listen);
+            }else{
+                _listen = setInterval('setListen()',_lisTime);
+            }
+
+        }
+        function setListen(){
+            var _audio  = $('#audio').get(0);
+            var _time = $('#time');
+            //看是否结束
+            if(_audio.ended) {
+                _go = false;
+                clearInterval(_listen);
+                changePro(0);
+            }else{
+                //设置时间--秒转成分
+                var _time1 = Math.floor (_audio.duration / 60) + ':' + (_audio.duration  % 60).toFixed (0);;
+                var _time2 = Math.floor (_audio.currentTime / 60) + ':' + (_audio.currentTime  % 60).toFixed (0);;
+//                _time.html(_audio.duration + '/' + _audio.currentTime);
+                _time.html(_time1 + '/' + _time2);
+                console.info(_audio.paused);
+                //修改进度-- 也就是宽度
+                var _totalWidth = $('#progress').width();
+                changePro(_totalWidth/_audio.duration*_audio.currentTime);
+            }
+        }
+
+        //对进度条的点击调整进度
+        function clickPro(){
+            $('#progress').bind('click',function(e){
+                e.preventDefault();
+                var offset = $(this).offset();
+                var relativeX = (e.pageX - offset.left);
+//                var relativeY = (e.pageY - offset.top);
+                //设置音乐进度
+                changeTime(relativeX);
+                changePro(relativeX);
+            });
+        }
+
+
+        //进度条的拖拽
+        function dragPro(){
+            var _fleft = $('#progress').offset().left;
+            var _x2 = _fleft + $('#progress').width();
+            var _ftop = $('#progress').offset().top;
+            $('#proBlock').draggable({
+                axis: "x",
+//                containment: "parent",
+                containment: [_fleft,_ftop,_x2,_ftop],
+                drag: function (event, ui) {
+                    console.info(_fleft+'---'+ _x2);
+                    console.info($(this).offset().left - _fleft);
+//                    changePro($(this).offset().left - _fleft);
+                    changePro($(this).offset().left - _fleft);
+
+                },
+                start:function(){
+                },
+                stop:function(){
+                    $(this).css({
+                        left:0
+                    });
+                }
+            });
+        }
+
+        // ===================================  功能函数 ================================
+        //修改进度位置
+        function changePro(len){ //len是修改的长度
+            $('#pro').css({
+                width:len
+            });
+        }
+
+        // 根据进度条比例,设置音乐的进度
+        function changeTime(len){ //len是进度条长度
+            var _audio  = $('#audio').get(0);
+            var pros = len/$('#progress').width();
+            _audio.currentTime = pros*_audio.duration;
+        }
+    </script>
+    <style type="text/css">
+        #left{
+            width: 600px;
+            border: 1px solid red;
+            float: left;
+        }
+        #right{
+            width: 300px;
+            float: left;
+            border: 1px solid green;
+        }
+        #left ol{
+            margin:0px;
+            /*padding-left: -210px;*/
+        }
+        /*进度条部分*/
+        #progress{
+            width: 300px;
+            height:10px;
+            background-color: #CCCCCC;
+            border: 0px;
+        }
+        #pro{
+            height: 100%;
+            border: 0px;
+            width: 0px;
+            background-color: #0030ce;
+            float: left;
+        }
+        #proBlock{
+            width: 8px;
+            background-color: red;
+            height: 100%;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div id="left">
+    <h2> audio 简单的入门 </h2>
+    <div>
+        <ol>
+            <li>
+<pre>
+<h3>audio</h3>
+    属性   	   属性值	       注释
+    src	        url	          播放音乐的url地址
+    preload	    load/auto	  预加载
+    loop	    loop	      循环播放
+    controls	controls	  是否显示默认的控制按钮
+    autoplay	autoplay	  自动播放
+</pre>
+            </li>
+            <li>
+<pre>
+    <h3>各大浏览器对音乐格式的支持情况</h3>
+    音频格式	  Chrome/Firefox	IE9 Opera	Safari
+    OGG	        支持	             支持	      支持
+    MP3	        支持	             不支持	      支持
+    WAV	        不支持	         支持	      不支持
+</pre>
+            </li>
+            <li>
+<pre>
+    <h3>属性         	Chrome Firefox</h3>
+    duration	  获取媒体文件的总时长，以秒（S）为单位，如果无法获取返回NaN
+    paused	      如果媒体文件被暂停，那么paused属性返回true，反之false
+    ended	      如果媒体文件播放完毕返回true
+    muted	      用来获取是否为静音状态，值为bool
+    volume	      控制音量的属性，值为0－1；0 为最小，1为最大
+    startTime	  返回起始的播放时间
+    error	      返回错误的代码，额uull的时候为正常，否则可以通过
+                  Music.error.code来获取具体繁荣错误代码：
+    currentTime	  用来获取或者控制当前的播放时间，单位是秒（S）
+    currentSrc	  以字符串的形式返回正在播放或者已经加载的文件
+</pre>
+            </li>
+            <li>
+<pre>
+    <h3>函数	              作用</h3>
+    load()	             加载音频，视频,重新加载歌曲，更改src后用于重新加载歌曲
+    play（）	             播放
+    pause()	             暂停播放
+    canPlayType(type)	 测试是否支持给定类型文件
+                        video/ogg
+                        video/mp4
+                        video/webm
+                        audio/mpeg
+                        audio/ogg
+                        audio/mp4
+                        常用值，包括编解码器：
+                        video/ogg; codecs="theora, vorbis"
+                        video/mp4; codecs="avc1.4D401E, mp4a.40.2"
+                        video/webm; codecs="vp8.0, vorbis"
+                        audio/ogg; codecs="vorbis"
+                        audio/mp4; codecs="mp4a.40.5"
+
+                        返回 ： 表示支持的级别。可能的值：
+                        "probably" - 最有可能支持
+                        "maybe" - 可能支持
+                        "" - （空字符串）不支持
+</pre>
+            </li>
+            <li>
+<pre>
+    <h3>常用的事件</h3>
+    事件名称	           事件作用
+    loadstart	     客户端开始请求数据
+    progress	     客户端正在请求数据，缓冲
+    play
+    pause
+    ended
+    timeupdate	     当前播放时间发生改变的时候
+    canplaythrough	 歌曲已经载入完全
+    canplay	         缓冲至目前可播放的状态
+</pre>
+            </li>
+        </ol>
+    </div>
+</div>
+<div id="right">
+    <audio id="audio" src="resource/music.mp3">备用（当浏览器不支持audio时显示的内容）</audio>
+    <input  type="button" value="加载音乐" onclick="go('load')">
+    <input  type="button" value="播放" onclick="go('play')">
+    <input type="button" value="暂停" onclick="go('pause')" />
+    <input type="button" value="测试是否支持给定类型文件" onclick="go('canPlayType')" />
+    <p>
+        <input type="button" value="监控进度" onclick="go('pause')" />
+    </p>
+    <p>
+        控制声音
+        <input type="button" value="+" onclick="setVo(0.1)">
+        <input type="button" value="-" onclick="setVo(-0.1)">
+    </p>
+    <p>
+        进度条---音乐load并且start以后开始
+        <div id="progress"><div id="pro"></div><div id="proBlock"></div></div>
+        <div id="time"></div>
+        <input type="button" value="开始测试" onclick="listenPro()">
+    </p>
+</div>
+</body>
+</html>

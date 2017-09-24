@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        function down(){
+            //后端将文件写成 iso8859-1 的string，然后交给前端，前端转成 byte[] ，然后写成对应的文件
+            // 将 string 写成 文件，使用 browser-saveas 的js
+
+            $.ajax({
+                url:"demo_test.txt",
+                datatype:text,
+                success:function(result){
+                    if (!result.errCode) {
+                        var sliceSize = 512;
+                        // atob 好像是进行  base64 解密
+                        //var byteCharacters = atob(data.fileContent);
+                        var byteCharacters = data.fileContent;
+                        var byteArrays = [];
+                        // 将string写成 byte[]
+                        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                            var slice = byteCharacters.slice(offset, offset + sliceSize);
+                            var byteNumbers = new Array(slice.length);
+                            for (var i = 0; i < slice.length; i++) {
+                                byteNumbers[i] = slice.charCodeAt(i);
+                            }
+                            var byteArray = new Uint8Array(byteNumbers);
+                            byteArrays.push(byteArray);
+                        }
+                        // Blob 是现在前端的大文件的存储对象
+                        var blob = new Blob(byteArrays, {type: 'application/pdf'});
+                        saveAs(blob, data.fileName);
+                    } else {
+                        console.log(data.errCode);
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<input type="button" value="点击下载" onclick="down()"/>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!--<link rel="stylesheet" href="css/pace/black/pace-theme-barber-shop.css" />-->
+    <link rel="stylesheet" href="css/pace/black/pace-theme-big-counter.css" />
+    <style type="text/css">
+        #black1{
+            width: 100%;
+            height: 300px;
+            border: 1px solid grey;
+        }
+    </style>
+    <script type="text/javascript">
+        var paceOptions = {
+            ajax: true, // disabled
+            document: false, // disabled
+            eventLag: false, // disabled
+            elements: {
+                selectors: ['#black1']
+            },
+            restartOnPushState: true
+        };
+    </script>
+    <script type="text/javascript" src="js/pace.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        var _cssTheme = {};
+        $(function(){
+            ajaxTheme();
+        });
+
+        // =================== ajax 请求 ===========================
+
+        // 获取 theme 的 css 的资源文件
+        function ajaxTheme(){
+            $.ajax({
+                url: "http://localhost:63342/web/%E7%89%B9%E6%95%88/%E8%BF%9B%E5%BA%A6%E6%9D%A1loading/data/theme.json",
+                dataType: "json",
+                type: "GET",
+                success: function(req) {
+                    _cssTheme = req;
+                    //初始化下拉框
+                    initSelect();
+                    // 绑定事件
+                    bindChange($('select[name=name]'));
+                    bindChange($('select[name=theme]'));
+                }
+            });
+        }
+        // 测试 ajax 请求 data数据
+        function ajaxTest(){
+            $.ajax({
+                url: "http://localhost:63342/web/%E7%89%B9%E6%95%88/%E8%BF%9B%E5%BA%A6%E6%9D%A1loading/data/data.json",
+                dataType: "json",
+                type: "GET",
+                success: function(req) {
+                    console.info(req);
+
+                }
+            });
+        }
+
+        // =================== 事件绑定 ===========================
+
+        function bindChange(obj) {
+            obj.change(function () {
+                var tempUrl = getCssUrl();
+                changeTheme(tempUrl);
+                Pace.restart();
+            });
+        }
+
+        // =================== 功能函数 ===========================
+        function start(){
+            Pace.restart();
+        }
+
+        // 移除 pace 特效产生的 div
+        function clearPace(){
+            $('div.pace').remove();
+        }
+
+        //切换主题
+        function changeTheme(theme){
+            var _link = '<link rel="stylesheet" href="'+ theme +'" />';
+            // 替换新的css
+            $('head').find('link').remove();
+            $('head').append(_link);
+        }
+
+        // 将数据绑在 select 上
+        function initSelect(){
+            var _arrName = _cssTheme['name'];
+            var _arrTheme = _cssTheme['url'];
+            var selectName = $('select[name=name]');
+            var selectTheme = $('select[name=theme]');
+            for (var i = 0; i < _arrName.length; i++) {
+                var tempObj = _arrName[i];
+                var _option = '<option value="'+ tempObj +'">'+ tempObj +'</option>';
+                selectName.append(_option);
+            }
+            for (var i = 0; i < _arrTheme.length; i++) {
+                var tempObj = _arrTheme[i];
+                var _option = '<option value="'+ tempObj +'">'+ tempObj +'</option>';
+                selectTheme.append(_option);
+            }
+        }
+
+        //获取 2个 select的值，拼接成 css 的url
+        function getCssUrl(){
+            return $('select[name=name]').val() + '/' + $('select[name=theme]').val();
+        }
+
+    </script>
+</head>
+<body>
+<div id="theme">
+    <select name="name"></select>
+    <select name="theme"></select>
+</div>
+<div id="black1">
+    <input type="button" value="从新加载" data-color="black/pace-theme-big-counter" onclick="start(this)"/>
+</div>
+</body>
+</html>

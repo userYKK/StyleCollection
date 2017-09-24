@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="css/canvas.css">
+    <script type="text/javascript" src="js/Rect.js"></script>
+    <script type="text/javascript" src="js/arc_circle.js"></script>
+    <script type="text/javascript" src="js/diy.js"></script>
+    <script type="text/javascript">
+
+        function test1(){
+            draw21("canvas1");
+        }
+        function test2(){
+            draw22("canvas1");
+        }
+        function test3(){
+            draw0("canvas1");
+        }
+        function test4(){
+            doIt("canvas1");
+        }
+    </script>
+</head>
+
+<body>
+<input type="button" value="画矩形" onclick="test1()">
+<input type="button" value="清除" onclick="test2()">
+<input type="button" value="圆形" onclick="test3()">
+<input type="button" value="填充图片" onclick="test4()">
+<canvas id="canvas1" width="500px" height="500px"></canvas>
+</body>
+</html>

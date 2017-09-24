@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        html,body{overflow-y: auto;}
+        ul{padding: 0;margin: 0;}
+        li{list-style: none;}
+        header{width: 100%;margin-bottom: 0;}
+        .home_doc_list{text-align: center;overflow: hidden;padding: 60px 0 60px;}
+        .home_doc_list li{width: 210px;min-height: 350px;display: inline-block;background: #fafafa;padding: 50px 0 0;margin: 0 15px;vertical-align: top;transition: all 0.2s ease-out 0s;position: relative;opacity: .95;}
+        .home_doc_list li:hover{background: #5699ec;}
+        .home_doc_list li::before{width: 80px;height: 80px;content: '';border: 1px solid #5699ec;border-radius: 50%;background: #5699ec url(images/home_doc_icons.png) no-repeat 18px -88px;position: absolute;top: 0;left: 50%;margin: -40px 0 0 -40px;transition: all 0.2s ease-out 0s;}
+        .home_doc_list li:hover::before{background-color: #fff;}
+        .home_doc_list li.home_doc_list_0::before{background-position: 12px 11px;}
+        .home_doc_list li.home_doc_list_0:hover::before{background-position: 12px -88px;}
+        .home_doc_list li.home_doc_list_1::before{background-position: -283px 12px;}
+        .home_doc_list li.home_doc_list_1:hover::before{background-position: -283px -88px;}
+        .home_doc_list li.home_doc_list_2::before{background-position: -581px 12px;}
+        .home_doc_list li.home_doc_list_2:hover::before{background-position: -581px -88px;}
+        .home_doc_list li.home_doc_list_3::before{background-position: -880px 13px;}
+        .home_doc_list li.home_doc_list_3:hover::before{background-position: -880px -88px;}
+
+        .home_doc_list li strong{display: block;font-size: 20px;color: #5e9eed;font-weight: normal;}
+        .home_doc_list li:hover strong{color: #fff;}
+        .home_doc_list li a{display: block;color: #808080;font-size: 14px;line-height: 26px;padding: 8px 0;}
+        .home_doc_list li:hover a{color: #fff;}
+        .home_doc_list li a:hover{text-decoration: none;}
+        .home_doc_list li a span{transition: all 0.2s ease-out 0s;}
+        .home_doc_list li a:hover span{background: #307ddd;color: #fff;display: inline-block;padding: 0 30px;}
+
+    </style>
+</head>
+<body>
+<div class="home_doc home_black">
+    <ul class="home_doc_list">
+        <li class="home_doc_list_0">
+            <strong>Web</strong>
+            <a href="#"><span>JavaScript API</span></a>
+            <a href="#"><span>地图组件</span></a>
+            <a href="#"><span>URI API</span></a>
+            <a href="#"><span>室内地图JS API</span></a>
+        </li>
+        <li class="home_doc_list_1">
+            <strong>Android</strong>
+            <a href="#"><span>定位SDK</span></a>
+            <a href="#"><span>地图SDK</span></a>
+            <a href="#"><span>导航SDK</span></a>
+            <a href="#"><span>室内定位SDK</span></a>
+            <a href="#"><span>室内地图SDK</span></a>
+        </li>
+        <li class="home_doc_list_2">
+            <strong>iOS</strong>
+            <a href="#"><span>定位SDK</span></a>
+            <a href="#"><span>地图SDK</span></a>
+            <a href="#"><span>导航SDK</span></a>
+            <a href="#"><span>室内定位SDK</span></a>
+            <a href="#"><span>室内地图SDK</span></a>
+        </li>
+        <li class="home_doc_list_3">
+            <strong>服务接口</strong>
+            <a href="#"><span>Web服务API</span></a>
+            <a href="#"><span>云图API</span></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

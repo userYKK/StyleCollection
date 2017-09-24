@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="css/1.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+        });
+        function showChk(){
+            var count = $('.chk:checked').length;
+            console.info(count);
+        };
+
+        function bindChk(){
+            $('.chk').bind('click',function(e){
+                e.preventDefault();
+                //如果当前有绑定的，不能让check
+
+            })
+        }
+    </script>
+</head>
+<body>
+<div>单选按钮版</div>
+<div id="context">
+    <div class="container">
+        <div class="holder" style="background: white;">
+            <div class="center" style="width: 180px;">
+                <input type="radio" name="a1" class="chk" id="checkbox-10-1" /><label for="checkbox-10-1"></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="holder" style="background: white;">
+            <div class="center" style="width: 180px;">
+                <input type="radio" name="a1" class="chk" id="checkbox-11-1" /><label for="checkbox-11-1"></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="holder" style="background: white;">
+            <div class="center" style="width: 180px;">
+                <input type="radio" name="a1" class="chk" id="checkbox-12-1" /><label for="checkbox-12-1"></label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <input type="button" value="查看选中了几个" onclick="showChk()">
+</div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+div{
+    text-align:center;
+}
+
+svg{
+
+
+}
+#bb{
+    animation: 3s go-down infinite;
+}
+#br{
+    animation: 3s go-right infinite;
+}
+#bl{
+    animation: 3s go-left infinite;
+}
+#sb{
+    transform-origin: top;
+    animation: 3s bottom-inner infinite;
+}
+#sr{
+    transform-origin: 0% 66%;
+    animation: 3s right-inner infinite;
+}
+#sl{
+    transform-origin: 100% 66%;
+    animation: 3s left-inner infinite;
+}
+@keyframes go-down{
+    0%{
+        transform: translateY(0);
+        opacity: 1;
+    }
+    35%{
+        transform: translateY(0);
+        opacity: 1;
+    }
+    45%{
+        transform: translateY(80px);
+        opacity: 0;
+    }
+    59.99%{
+        transform: translateY(0);
+        opacity: 0;
+    }
+    60%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateY(0);
+        opacity: 1
+    }
+}
+
+@keyframes go-right{
+    0%{
+        transform: translate(0);
+        opacity: 1;
+    }
+    35%{
+        transform: translate(0);
+        opacity: 1;
+    }
+    45%{
+        transform: translate(46.2px, -32.7px);
+        opacity: 0;
+    }
+    59.99%{
+        transform: translate(0);
+        opacity: 0;
+    }
+    60%{
+        opacity: 1;
+    }
+    100%{
+        transform: translate(0);
+        opacity: 1
+    }
+}
+
+@keyframes go-left{
+    0%{
+        transform: translate(0);
+        opacity: 1;
+    }
+    35%{
+        transform: translate(0);
+        opacity: 1;
+    }
+    45%{
+        transform: translate(-46.2px, -32.7px);
+        opacity: 0;
+    }
+    59.99%{
+        transform: translate(0);
+        opacity: 0;
+    }
+    60%{
+        opacity: 1;
+    }
+    100%{
+        transform: translate(0);
+        opacity: 1
+    }
+}
+
+@keyframes bottom-inner{
+    0%{
+        opacity: 0;
+        animation-timing-function: ease-in;
+        transform: translateY(80px);
+    }
+    10%{
+        opacity: 1;
+        animation-timing-function: ease-in-out;
+        transform: translateY(-8px);
+    }
+    16%{
+        animation-timing-function: ease-in-out;
+        transform: translateY(4.2px);
+    }
+    20%{
+        animation-timing-function: ease-in-out;
+        transform: translateY(-2.8px);
+    }
+    23%{
+        animation-timing-function: ease-in-out;
+        transform: translateY(0);
+    }
+    50%{
+        transform: translate(0);
+        animation-timing-function: ease-in;
+    }
+    60% {
+        animation-timing-function: ease-out;
+        transform: scale(3.3333);
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 0;
+        transform: scale(1) translateY(40px);
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+@keyframes right-inner{
+    0%{
+        opacity: 0;
+    }
+    15%{
+        opacity: 0;
+        animation-timing-function: ease-in;
+        transform:  translate(46.2px, -32.7px);
+    }
+    25%{
+        opacity: 1;
+        animation-timing-function: ease-in-out;
+        transform: translate(-6.5px, 4.6px);
+    }
+    31%{
+        animation-timing-function: ease-in-out;
+        transform: translate(3.43px,-2.42px);
+    }
+    35%{
+        animation-timing-function: ease-in-out;
+        transform: translate(-2.29px, 1.61px);
+    }
+    38%{
+        animation-timing-function: ease-in-out;
+        transform: translateY(0);
+    }
+    50%{
+        transform: translate(0);
+        animation-timing-function: ease-in;
+    }
+    60% {
+        animation-timing-function: ease-out;
+        transform: scale(3.3333);
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 0;
+        transform: scale(1) translate(32.65px , -23.09px);
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+@keyframes left-inner{
+    0%{
+        opacity: 0;
+    }
+    10%{
+        opacity: 0;
+        animation-timing-function: ease-in;
+        transform:  translate(-46.2px, -32.7px);
+    }
+    20%{
+        opacity: 1;
+        animation-timing-function: ease-in-out;
+        transform: translate(6.5px, 4.6px);
+    }
+    26%{
+        animation-timing-function: ease-in-out;
+        transform: translate(-3.43px,-2.42px);
+    }
+    30%{
+        animation-timing-function: ease-in-out;
+        transform: translate(2.29px, 1.61px);
+    }
+    33%{
+        animation-timing-function: ease-in-out;
+        transform: translateY(0);
+    }
+    50%{
+        transform: translate(0);
+        animation-timing-function: ease-in;
+    }
+    60% {
+        animation-timing-function: ease-out;
+        transform: scale(3.3333);
+        opacity: 1;
+    }
+
+    65% {
+        opacity: 0;
+        transform: scale(1) translate(-32.65px , -23.09px);
+    }
+    100%{
+        opacity: 0;
+    }
+}
+

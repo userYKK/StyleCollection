@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .dirver{
+            width: 200px;
+            height: 40px;
+            margin: 0px;
+            padding: 0px;
+        }
+        .dirver_left{
+            float: left;
+            height: 100%;
+        }
+        .dirver_left img{
+            margin-top: 10px;
+        }
+        .dirver_right{
+            float: left;
+        }
+        .dirver span{
+            margin: 3px;
+            display: block;
+            font-size: 6px;
+            color: #888888;
+            font-weight: 500;
+        }
+        .dirver .dirver_right_title{
+            color:#191919;
+
+        }
+        .skillbar-bar{
+            border: solid 0.5px #d5d7d2;
+            width: 60px;
+            height: 5px;
+
+        }
+        .skillbar-bar-child{
+            height: 100%;
+            background-image: url("imgs/loadingBack.jpg");
+            width: 0px;
+        }
+    </style>
+    <script type="text/javascript" src='js/jquery-1.10.2.js'></script>
+    <script type="text/javascript">
+        $(function(){
+            var a = $('.skillbar-bar-child').eq(0).parent().parent().parent();
+            $('.skillbar-bar-child').eq(0).animate({
+                width:a.attr('data-percent')
+            },1000);
+        });
+    </script>
+</head>
+<body>
+<div class="dirver" data-percent="70%">
+    <div class="dirver_left">
+        <img src="imgs/sysDriver.png" width="30" height="20">
+    </div>
+    <div class="dirver_right">
+        <span class="dirver_right_title">新加卷</span>
+        <div class="skillbar-bar">
+            <div class="skillbar-bar-child"></div>
+        </div>
+        <span>30G可用</span>
+    </div>
+</div>
+</body>
+</html>

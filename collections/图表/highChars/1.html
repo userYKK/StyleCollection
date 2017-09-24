@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="application/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="application/javascript" src="js/highcharts.js"></script>
+    <script type="application/javascript">
+        $(function(){
+            setChar($('#highChar'),'折线图标题');
+        })
+        function setChar(obj,title){
+            /*
+             //图标出现loading，显示和隐藏的时间间隔
+             loading: {
+             hideDuration: 2000,
+             showDuration: 1000
+             },
+             chart = $('#container').highcharts();
+             chart.showLoading(); //隐藏
+             chart.hideLoading();//显示
+
+
+             对数轴 ，并且设置上线
+             yAxis: {
+             type: 'logarithmic',
+             max: 10000
+             },
+
+
+
+             //折线图---
+             1、图例的 位置样式和点击事件
+             2、折线的颜色，点的tip，
+             3. y轴的显示，使用对数，但是从0开始
+            */
+            var months = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+            var _year = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]; //用于显示年份的图例的图
+            var _data = [7, 4, 37, 26, 20, 40, 110737, 8382, 44137, 1, 1, 1];
+            var _max = Math.max.apply({},_data);
+            if(_max < 10000) _max = 10000;
+            //格式化轴
+            obj.highcharts({
+                xAxis: {
+                    categories: months,
+                    tickmarkPlacement: 'between',
+                    title:{
+                        align: 'middle',
+                        text:'月份',
+                        offset:35
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'top',
+                    floating:false,
+                    x:-10,
+                    y:0,
+                    layout: 'vertical', //图例竖着
+                    shadow: true,   //有框
+                    backgroundColor: '#FFFFFF',
+                    itemMarginBottom: 10, //每个图例之间的距离
+                    itemMarginTop: 8,
+                    itemHoverStyle: {  //设置鼠标悬停
+                        color: '#2fabdb',
+                        fontWeight: 'bold',
+                        'text-shadow':'0 0 5px #ffa2ff'
+                    },
+                    itemStyle: {  //设置一般的样式
+                        color: '#504d53',
+                        fontWeight: 'bold',
+                        'text-shadow':''
+                    }
+                },
+                yAxis: {
+                    type: 'logarithmic',
+                    startOnTick:false,
+                    max:_max,
+                    min:1,
+                    labels: {
+                        //格式化坐标轴，避免坐标轴的小数刻度出现异常
+                        formatter: function(){
+                            if(this.value <= 1) return 0;
+                            return this.value;
+                        }
+                    },
+                    /* labels: {
+                     format: '{value} '
+                     },*/
+                    title:{
+                        align: 'middle',
+                        rotation:360,
+                        offset:80,
+                        text:'文<br>件<br>数<br>量<br>(个)'
+                    }
+                },
+
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: title
+                },
+                tooltip: {
+                    formatter: function(){
+                        var strHead = this.x + '份<br>';
+                        var str = '';
+                        if(this.y == 1){
+                            str = '0';
+                        }else if(this.y == 1.3) {
+                            str = '1';
+                        }else{
+                            str = this.y;
+                        }
+                        strHead += '文件数量: <b>'+ str +'</b>';
+                        return strHead;
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        enableMouseTracking: true,
+                        animation: {
+                            duration: 2000
+                        },
+                        cursor: 'pointer',
+                        events: {
+                            click: function () {
+                                //后期可以跳转查询页面
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            align: 'left',
+                            borderRadius: 5,
+                            backgroundColor: 'rgba(252, 255, 197, 0.7)',
+                            borderWidth: 1,
+                            borderColor: '#AAA',
+                            y: -6,
+                            formatter: function(){
+                                var str = '<b>';
+                                if(this.y == 1){
+                                    str += 0;
+                                }else if(this.y == 1.3) {
+                                    str += 1;
+                                }else{
+                                    str += this.y;
+                                }
+                                str += '</b>';
+                                return str;
+                            }
+                        }
+                    },
+                    series: {
+                        events: {
+                            //设置图例的点击事件
+                            legendItemClick: function (e) {
+                                if(this.name.indexOf('年')>-1){
+                                    //跳转年的折线图
+                                    ajaxNumByTime(caseId,obj);
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    type:'line',
+                    name:'月份分布图',
+                    data: _data
+                },{
+                    type:'line',
+                    name:'年份分布图',
+                    data: _year
+                }],
+                credits:{
+                    enabled:false
+                }
+                ,
+                colors: ['#7cb5ec','#9346fb'] //添加线条的颜色
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="highChar"></div>
+</body>
+</html>

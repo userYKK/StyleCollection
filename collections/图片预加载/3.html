@@ -1,0 +1,84 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>js 实现图片预加载 加载完后执行动作</title>
+</head>
+<style type="text/css">
+    img{
+        width: 500px;
+        height: 500px;
+    }
+</style>
+<div id="loading">
+    <p><img src="imgs/loading.gif" /></p>
+    <p><input type="button" value="下一张图" onclick="show()"/></p>
+</div>
+<script>
+    var i=0;
+    var c=3;
+    var imgarr=new Array
+    imgarr[0]="imgs/1.jpg";
+    imgarr[1]="imgs/2.jpg";
+    imgarr[2]="imgs/3.jpg";
+
+    var Browser=new Object();
+    Browser.userAgent=window.navigator.userAgent.toLowerCase();
+    Browser.ie=/msie/.test(Browser.userAgent);
+    Browser.Moz=/gecko/.test(Browser.userAgent);
+
+    window.onload = function(){
+        icall(0);
+    }
+
+    function SImage(url,callback)
+    {
+        var img = new Image();
+        if(Browser.ie){
+            console.info('ie 浏览器');
+
+            // 对于 ie 浏览器下判断图片加载完毕
+            img.onreadystatechange =function(){
+                if(img.readyState=="complete"||img.readyState=="loaded"){
+                    i=i+1;
+                    callback(i);
+                }
+            }
+        }else if(Browser.Moz){
+            console.info('moz 浏览器');
+
+            // 对 moz 浏览器下判断图片加载完毕
+            img.onload=function(){
+                if(img.complete==true){
+                    i=i+1;
+                    callback(i);
+                }
+            }
+        }
+
+        img.src=url;
+        console.info(url);
+    }
+    //图片预加载的 回调函数
+    function icall(v)
+    {
+        if(v < c){
+            SImage(""+imgarr[v]+"",icall);
+        }
+        else if(v>=c){
+            i=0;
+            alert(1);
+            //location.replace('banner.html');//这里写自己的动作吧，
+        }
+    }
+    //图片预加载完毕以后进行展示
+    function show(){
+        i++;
+        if(i >= c){
+            i = 0;
+        }
+        console.info(i);
+        document.images.item(0).src = imgarr[i];
+    }
+</script>

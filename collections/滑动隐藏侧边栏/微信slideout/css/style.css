@@ -1,0 +1,17 @@
+/* 初始化 */
+body { color: #666; font: 14px/1.428571429 Helvetica, Arial, sans-serif, "Hiragino Sans GB","Hiragino Sans GB W3"; }
+html, body { width: 100%; height: 100%; }
+html, body, form, div, img, p, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, select, input, button textarea, th, td, hr, article, aside, header, footer, nav, section, summary, figure, figcaption { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img { border: 0; vertical-align: middle; }
+em, i { font-style: normal; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+*, *:before, *:after { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+select, input, button { vertical-align: middle; outline: none; }
+textarea { resize: none; vertical-align: top; outline: none; }
+input[type="button"], input[type="submit"], input[type="reset"], button { border: 0; cursor: pointer; -webkit-appearance: button; }
+button[disabled], html input[disabled] { cursor: default; }
+input[type="file"] { display: block; }
+input{ outline:none; border:none; padding:0; margin:0; font-size:12px;}
+a{ color: #666; text-decoration: none; outline: none; }

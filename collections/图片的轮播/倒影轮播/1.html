@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+  body{
+	  margin:0px; padding:0px;
+	  background:#000;}
+	  
+ #banner{
+	 width:800px;
+	 margin-top:150px;
+	 position:relative;
+	 perspective:800px;
+	 transform-style:preserve-3d;}
+ #banner img{
+	 width:300px;
+	 height:200px;
+	 position:absolute;
+	 -webkit-box-reflect:below 3px -webkit-linear-gradient(top,rgba(0,0,0,.1),rgba(0,0,0,.5));}
+</style>
+<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+
+</head>
+
+<body>
+<div id="banner">
+	<img src="img/1.jpg" style="left:100px; transform:rotateY(45deg) translateZ(-100px);"/>
+    <img src="img/2.jpg" style="left:200px; transform:rotateY(45deg) translateZ(-100px);"/>
+    <img src="img/3.jpg" style="left:300px; transform:translateZ(100px);"/>
+    <img src="img/4.jpg" style="left:400px; transform:rotateY(-45deg) translateZ(-100px);"/>
+    <img src="img/5.jpg" style="left:500px; transform:rotateY(-45deg) translateZ(-100px);"/>
+</div>
+</body>
+</html>
