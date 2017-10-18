@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/jquery-1.10.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/less.js" type="text/jsp" charset="utf-8"></script>
+		<link rel="stylesheet" href="css0.css"/>
+		<link rel="stylesheet" href="less0.less"/>
+	</head>
+	<body>
+		<div id="a01">
+			<h1>contrast/brightness -- hover 增亮图片</h1>
+			<p>通常页面上的按钮，都会有 hover/active 的颜色变化，以增强与用户的交互。但是一些图片展示，则很少有 hover 的交互，运用 filter: contrast() 或者 filter: brightness() 可以在 hover 图片的时候，调整图片的对比图或者亮度，达到聚焦用户视野的目的。
+brightness表示亮度，contrast 表示对比度。</p>
+			<div id="a123"></div>
+		</div>
+		
+		<div id="a02">
+			<h1>blur -- 生成图像阴影</h1>
+			<p>通常而言，我们生成阴影的方式大多是 box-shadow 、filter: drop-shadow() 、text-shadow 。但是，使用它们生成阴影是阴影只能是单色的。但是通过巧妙的利用 filter: blur 模糊滤镜，我们可以假装生成渐变色或者说是颜色丰富的阴影效果。</p>
+			<div class="container2">
+			    <div class="avator"></div>
+			    <p>bulr shadow</p>
+			</div>
+		</div>
+		
+		
+		<div id="a03">
+			<h1>blur 混合 contrast 产生融合效果</h1>
+			<p>filter: blur()： 给图像设置高斯模糊效果。<br />
+filter: contrast()： 调整图像的对比度。</p>
+			<div class="container3">
+	    		<div class="filter-mix"></div>
+			</div> 
+		</div>
+		
+		<div id="a05">
+			<h1>文字融合动画</h1>
+			<div class="container">
+	  			<h1>YesAR</h1>
+			</div>
+		</div>
+		
+		<div id="a04">
+			<h1>燃烧的火焰</h1>
+			<p>核心还是 filter: contrast() 与 filter: blur() 配合使用，不过实现的过程也非常有趣，我们需要使用 CSS 画出一个火焰形状。</p>
+			<div class="fire">
+				<div class="g-container">
+					<div class="g-fire">
+						
+					</div>
+				</div>
+	    		<!--.g-container
+				    .g-fire
+				        - for (var j = 1; j <=40; j++)
+				            .g-dot-->
+			</div> 
+		</div>
+		<script>
+			var a=$(".g-fire");
+			for (var j = 0; j <=40; j++){
+				var b=$('<div class="g-dot"></div>');
+				a.append(b);
+				$('.g-dot').eq(j).css({
+//					'bottom': -c1[j] + 'px',
+//					'left': c2 + 'px',
+//					'animation': "move 2s infinite 6s linear",
+				});
+			}
+			function rd1(n,m){
+				var c = m-n+1;
+				for(var i=0;i<40;i++){
+					return Math.floor(Math.random() * c + n);
+				}
+			}
+			var n = 120;
+			var m = 240;
+			for(var i=0;i<41;i++) {
+				var c1 = rd1(n, m);
+				$('.g-dot').eq(i).css({
+					'bottom': -c1 + 'px',
+				});
+			}
+
+			function rd2(n2,m2){
+				var d2 = m2-n2+1;
+				for(var i=0;i<40;i++) {
+					return Math.floor(Math.random() * d2 + n2);
+				}
+			}
+			var n2 = 300;
+			var m2 = -160;
+			for(var i=0;i<41;i++) {
+				var c2=rd1(n2,m2);
+				$('.g-dot').eq(i).css({
+					'left': c2 + 'px',
+				});
+			}
+			function rd3(n3,m3){
+				var d3 = m3-n3+1;
+				for(var i=0;i<40;i++) {
+					return Math.floor(Math.random() * d3 + n3);
+				}
+			}
+			var n3 = 26;
+			var m3 = 7;
+			var c3=rd1(n3,m3);
+			for(var i=0;i<41;i++) {
+				var c3=rd1(n3,m3);
+				var c4=c3/10+'s';
+				console.log(c4);
+				$('.g-dot').eq(i).css({
+					'animation-name':'move',
+					'animation-duration':c4,
+					'animation-iteration-count':'infinite',
+					'animation-delay':'2s',
+					'animation-timing-function':'linear',
+//					'animation': "move 1.8s infinite 2s linear",
+				});
+			}
+
+			function rd4(n4,m4){
+				var d4 = m4-n4+1;
+				for(var i=0;i<40;i++) {
+					return Math.floor(Math.random() * d4 + n4);
+				}
+			}
+			var n4 = 3;
+			var m4 = 0;
+
+			for(var i=0;i<41;i++) {
+				var c5=rd1(n4,m4);
+				var c6=c5+'s';
+				console.log(c4);
+				$('.g-dot').eq(i).css({
+					'animation-delay':c6,
+				});
+			}
+			/*for (var j = 0; j <=40; j++){
+				var b=$('<div class="g-dot"></div>');
+				a.append(b);
+				$('.g-dot').eq(j).css({
+					'bottom': -c1[j] + 'px',
+					'left': c2 + 'px',
+					'animation': "move 2s infinite 6s linear",
+				});
+			}*/
+
+
+
+
+
+				console.log(c3/10);
+
+
+		</script>
+		
+		
+	</body>
+</html>
