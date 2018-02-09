@@ -3,8 +3,10 @@
 ----
 
 1. **1.html**
-   <small>----实现了jquery的 perfect-scrollbar 插件</small>
-   <small>---- 对父类容器进行相对定位, 进行滚动条的优化</small>
+   <small>---- 使用3中 css方式实现省略号</small>
+
+2. **2.html**
+   <small>----实现了jquery的 dotdotdot 插件</small>
 
 >     问题
  

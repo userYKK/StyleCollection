@@ -1,0 +1,46 @@
+fieldset{
+    width: 500px;
+    margin-top: 20px;
+}
+.ellipsis {
+    margin-top: 20px;
+    border: 1px solid red;
+    width: 300px;
+    height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ellipsis_four {
+    margin-top: 20px;
+    border: 1px solid red;
+
+    display:-webkit-box; /*必须结合的属性，将对象作为弹性伸缩盒子模型展示*/
+    -webkit-line-clamp: 4; /*需要结合其他属性来使用才有效果*/
+    -webkit-box-orient: vertical; /*必须结合的属性，设置子元素(在这里指文字)的排列方式*/
+    overflow: hidden;
+}
+
+
+.ellipsis_all {
+    position: relative; /*相对定位，为了让“查看全文”绝对定位到右下角*/
+    overflow: hidden;
+    max-height: 82px; /*指定盒子高度*/
+    line-height: 21px; /*指定盒子内文字的行高，防止一行文字只出现一半的情况*/
+    border: 1px solid red;
+}
+.ellipsis_all:after {
+    content: "查看全文";
+    color: blue;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 40px;
+    height:21px;
+    line-height: 26px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 20%, rgba(255, 255, 255, 1) 35%, #fff 100%); // 加此渐变背景避免文字值显示一半
+　　background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 20%, rgba(255, 255, 255, 1) 35%, #fff 100%);
+    background: -moz-linear-gradient(right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 20%, rgba(255, 255, 255, 1) 35%, #fff 100%);
+    background: -o-linear-gradient(right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 20%, rgba(255, 255, 255, 1) 35%, #fff 100%);
+}
