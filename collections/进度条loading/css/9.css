@@ -1,0 +1,25 @@
+body{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: black;
+}
+
+/*内容展示*/
+#content{
+    letter-spacing:1pt;
+    position: fixed;
+    z-index: 1;
+    top: 100px;
+    left: 100px;
+    color: white;
+}
+.bottom_canvas{
+    position: fixed;
+    z-index: 2;
+    top: 100px;
+    left: 100px;
+}
+.word{
+
+}
