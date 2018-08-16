@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.10.2.js"></script>
+</head>
+
+<body>
+<span>十里春风不如你啊十里</span>
+<span>不</span>
+<span>十里春风不如你啊</span>
+<span>好长好长的文字，比如今天中午吃啥，好像带的饭</span>
+<span>昨天小猫走掉了，某些个傻姑凉伤心伤心的哭着</span>
+<span>今天中午要吃饭丫要吃饭</span>
+<span>那啥是啥<span>午要吃饭丫</span>不是啥我也不知道</span>
+<button id="test">关键词匹配</button>
+
+<div class="keygroup" id="1">
+    哼哼
+</div>
+<span class="del_group" gid="1">x</span>
+
+<div class="keygroup" id="2">
+    哼哼2
+</div>
+<span class="del_group" gid="2">x</span>
+
+<div class="keygroup" id="3">
+    哼哼1
+</div>
+<span class="del_group" gid="3">x</span>
+
+<hr>
+<div id="del">
+
+</div>
+<script>
+    // $(function () {
+    //   bindEvent();
+    // });
+
+    var but = document.getElementById('test');
+    var temp = {
+        1: {
+            "id": 1,
+            "name": "哼哼",
+            "primary": [
+                {
+                    "id": 6,
+                    "name": "里 不",
+                    color: 'grey'
+                },
+                {
+                    "id": 5,
+                    "name": "你啊十里",
+                    color: 'grey'
+                },
+                {
+                    "id": 10,
+                    "name": "饭丫不",
+                    color: 'grey'
+                },
+                {
+                    "id": 4,
+                    "name": "里春风",
+                    color: 'yellow'
+                },
+                {
+                    "id": 3,
+                    "name": "春风不",
+                    color: 'green'
+                },
+                {
+                    "id": 2,
+                    "name": "里春风",
+                    color: 'green'
+                },
+                {
+                    "id": 1,
+                    "name": "十里春",
+                    color: 'red'
+                }
+            ],
+            "secondary": [{
+                "id": 6,
+                "name": "文字",
+                color: 'grey'
+            },
+                {
+                    "id": 5,
+                    "name": "你啊十里",
+                    color: 'grey'
+                },
+                {
+                    "id": 4,
+                    "name": "里春风",
+                    color: 'yellow'
+                },
+                {
+                    "id": 3,
+                    "name": "春风不",
+                    color: 'green'
+                },
+                {
+                    "id": 2,
+                    "name": "里春风",
+                    color: 'green'
+                },
+                {
+                    "id": 1,
+                    "name": "十里春",
+                    color: 'red'
+                }
+            ]
+        },
+        2: {
+            "id": 2,
+            "name": "哼哼2",
+            "primary": [{
+                "id": 6,
+                "name": "是啥",
+                color: 'grey'
+            },
+                {
+                    "id": 5,
+                    "name": "走掉",
+                    color: 'grey'
+                }
+            ]
+        },
+        3: {
+            "id": 3,
+            "name": "哼哼1",
+            "primary": [{
+                "id": 6,
+                "name": "吃啥",
+                color: 'grey'
+            },
+                {
+                    "id": 5,
+                    "name": "伤心",
+                    color: 'grey'
+                },
+                {
+                    "id": 4,
+                    "name": "哭着",
+                    color: 'yellow'
+                },
+                {
+                    "id": 3,
+                    "name": "文字",
+                    color: 'green'
+                },
+                {
+                    "id": 2,
+                    "name": "好长",
+                    color: 'green'
+                },
+                {
+                    "id": 1,
+                    "name": "好长好",
+                    color: 'red'
+                }
+            ]
+        }
+    };
+
+    /*
+
+     {
+     "primary": {
+     "6": {
+     "name": "春风不",
+     "color": "green"
+     },
+     "7": {
+     "name": "春风不",
+     "color": "green"
+     },
+     }
+     }
+     */
+
+    var current_group_id = null;
+    var temp_key = {
+        primary: {},
+        secondary: {}
+    };
+    for (var key in temp) {
+        var value = temp[key];
+        if (value['primary']) {
+            for (var i = 0; i < value['primary'].length; i++) {
+                var obj = value['primary'][i];
+                var _temp_id = key + '-' + obj['id'];
+                temp_key["primary"][_temp_id] = obj;
+            }
+        }
+        if (value['secondary']) {
+            for (var i = 0; i < value['secondary'].length; i++) {
+                var obj = value['secondary'][i];
+                var _temp_id = key + '-' + obj['id'];
+                temp_key["secondary"][_temp_id] = obj;
+            }
+        }
+    }
+    console.info('----  重组数据');
+    console.info(temp_key);
+
+    // 数据格式的转存
+    // var temp_primary = {};
+    // var primary = temp['primary'];
+    // if(primary){
+    //     for (var i = 0; i < primary.length; i++) {
+    //         var obj = primary[i];
+    //         temp_primary[obj['id']] = obj
+    //     }
+    // }
+
+    // group 分组信息，以及 tempid 分组信息的全局,以及分组对应的关键词组
+    var _data = {
+        'group': null,
+        'tags_temp_id': null,
+        'group_gid': {}
+    };
+    var group_tag = 'kk_group';
+    var group_attr = 'group';
+
+
+    var range, bookmark;
+    // document.designMode = "on";
+    if (document.createRange) {
+        range = document.createRange();
+    } else {
+        range = document.body.createTextRange();
+        bookmark = range.getBookmark();
+    }
+    var total = 0;
+    but.addEventListener('click', function () {
+        for (var key_temp in temp) {
+            var value = temp[key_temp];
+            if (value['primary']) {
+                for (var i = 0; key = value['primary'][i]; i++) {
+                    // range.removeRange(range);
+                    var key;
+                    if (range.findText) {
+                        range.collapse(true);
+                        range.moveToBookmark(bookmark);
+                        while (range.findText(key.name)) {
+                            range.pasteHTML(range.text.fontcolor(key.color));
+                        }
+                    } else {
+                        var selection;
+                        selection = window.getSelection();
+                        // selection.removeAllRanges();
+
+                        selection.collapse(document.body, 0);
+                        var findNull = 0;
+                        // while (selection.text) {
+                        while (window.find(key.name) || window.find(key.name.replace(/(.{1})/g, '$1 '))) {
+                            total++;
+                            window.scrollTo(0, (document.body.scrollHeight));
+
+                            var node = document.createElement("kk");
+                            // node.style.background = key.color;
+                            node.setAttribute('key', key.id);
+                            node.setAttribute('key_group', key_temp);
+                            node.setAttribute('key_type', "primary");
+                            node.setAttribute('temp_id', total);
+
+                            console.info('===================', selection.getRangeAt(0));
+                            var range1 = window.getSelection().getRangeAt(0);
+
+                            node.appendChild(range1.extractContents());
+                            range1.insertNode(node);
+
+
+                            if (node.innerText === '') {
+                                findNull++;
+                                if (findNull > 10) {
+                                    findNull = 0;
+                                    break;
+                                } else {
+                                    continue;
+                                }
+                            }
+
+                            // if (key.name === node.innerText.replace(/ |　/g, '')) {
+                            //     console.info(111);
+                            // }
+                        }
+                    }
+                }
+            }
+            if (value['secondary']) {
+                for (var i = 0; key = value['secondary'][i]; i++) {
+                    // range.removeRange(range);
+                    var key;
+                    if (range.findText) {
+                        range.collapse(true);
+                        range.moveToBookmark(bookmark);
+                        while (range.findText(key.name)) {
+                            range.pasteHTML(range.text.fontcolor(key.color));
+                        }
+                    } else {
+                        var selection;
+                        selection = window.getSelection();
+                        // selection.removeAllRanges();
+
+                        selection.collapse(document.body, 0);
+                        var findNull = 0;
+                        // while (selection.text) {
+                        while (window.find(key.name) || window.find(key.name.replace(/(.{1})/g, '$1 '))) {
+                            total++;
+                            window.scrollTo(0, (document.body.scrollHeight));
+
+                            var node = document.createElement("kk");
+                            // node.style.background = key.color;
+                            node.setAttribute('key', key.id);
+                            node.setAttribute('key_type', "secondary");
+                            node.setAttribute('key_group', key_temp);
+                            node.setAttribute('temp_id', total);
+
+                            console.info('===================', selection.getRangeAt(0));
+                            var range1 = window.getSelection().getRangeAt(0);
+
+                            node.appendChild(range1.extractContents());
+                            range1.insertNode(node);
+
+
+                            if (node.innerText === '') {
+                                findNull++;
+                                if (findNull > 10) {
+                                    findNull = 0;
+                                    break;
+                                } else {
+                                    continue;
+                                }
+                            }
+
+                            // if (key.name === node.innerText.replace(/ |　/g, '')) {
+                            //     console.info(111);
+                            // }
+                        }
+                    }
+                }
+            }
+
+        }
+        groupFun(total);
+    });
+
+
+    /**
+     *  合并一起的标签进行tag，鼠标展示方式
+     * @param total 临时匹配总数
+     */
+    function groupFun(total) {
+        var group_count = 0; //标记组的 id，展示每一组对应的 temp_id
+
+        /*
+         if(total > 0){
+
+         for (var i = 0; i < total; i++) {
+         var _self = $('kk[temp_id='+ i +']');
+         check(_self, group_count);
+         group_count++;
+         } //end for
+         }  //end if
+         */
+
+        /*
+         从dom直接获取，name获取的都是顶层的节点，然后处理 group 之间的关系： 查询子类，或者本身是否有 temp_id 相等的别的节点，那么存在的顶层的父类直接就是相关性的
+         */
+
+        if (total > 0) {
+            var all = $('kk');
+            var list = [];
+            if (all) {
+                for (var i = 0; i < all.length; i++) {
+                    var obj = all.eq(i);
+                    var p = obj.parent('kk');
+                    if (p && p.length > 0) {
+                        console.info(obj.attr('temp_id') + '---' + obj.attr('key'));
+                    } else {
+                        list.push(obj);
+                    }
+                }
+            }
+            console.info(list);
+
+            console.info('temp_id  --  keygroup --  key');
+            var tags = list;
+            var tags_temp_id = {}; // 存放group对应的所有的 temp_id
+            /*
+             tags_temp_id = {
+             gid:{
+             obj: obj
+             temps:[]
+             }
+             }
+
+             */
+
+            for (var i = 0; i < tags.length; i++) {
+                (function (index) {
+
+                    var obj = tags[index];
+                    var _temp_id = obj.attr('temp_id');
+                    var _key = obj.attr('key');
+                    var _key_group = obj.attr('key_group');
+                    console.info(_temp_id + " ---  " + _key_group + " ---  " + _key);
+
+                    tags_temp_id[group_count] = {};
+                    tags_temp_id[group_count]['obj'] = obj;
+
+                    // (1) 使用数组进行记录，那么会有重复的数据 --- 方便调试
+                    var temp_ids = [];
+                    temp_ids.push(_temp_id);
+
+                    // (2) 使用set进行 tempid的记录，后期做关联时候的处理
+                    var temp_ids_set = new Set();
+                    temp_ids_set.add(_temp_id);
+
+                    var _childs = obj.find('kk');
+                    if (_childs && _childs.length > 0) {
+                        for (var j = 0; j < _childs.length; j++) {
+                            var temp_obj = _childs.eq(j);
+                            temp_ids.push(temp_obj.attr('temp_id'));
+                            temp_ids_set.add(temp_obj.attr('temp_id'));
+                        }
+                    }
+                    tags_temp_id[group_count]['temps'] = temp_ids;
+                    tags_temp_id[group_count]['sets'] = temp_ids_set;
+
+                    group_count++;
+                })(i);
+
+            } // end for
+
+            console.info(tags_temp_id);
+            console.info('---------');
+            _data['tags_temp_id'] = tags_temp_id;
+
+            var group = {}; // 记录group之间的关系，最后进行合并
+
+            //父类进行分组,对比每组的 temps ，进行检查是否有合并
+            // 特殊处理最后一个
+            group[group_count - 1] = new Set();
+            group[group_count - 1].add(group_count - 1);
+            for (var i = 0; i < group_count - 1; i++) {
+                (function (ii) {
+                    var _temps = tags_temp_id[ii]['sets'];
+                    for (var j = ii + 1; j < group_count; j++) {
+                        (function (jj, oldset, old_index) {
+                            var _temp_set = new Set();
+                            var _new_temps = tags_temp_id[jj]['sets'];
+                            _new_temps.forEach(function (element, sameElement, set) {
+                                _temp_set.add(element);
+                            });
+                            oldset.forEach(function (element, sameElement, set) {
+                                _temp_set.add(element);
+                            });
+
+                            if (_temp_set.size < (_new_temps.size + oldset.size)) {
+                                console.info(old_index + ' 和 ' + jj + '有关联');
+                                var _temp_group = group[old_index];
+                                if (_temp_group) {
+                                    group[old_index].add(old_index);
+                                    group[old_index].add(jj);
+                                } else {
+                                    group[old_index] = new Set();
+                                    group[old_index].add(old_index);
+                                    group[old_index].add(jj);
+                                }
+                            } else {
+                                var _temp_group = group[old_index];
+                                if (!_temp_group) {
+                                    group[old_index] = new Set();
+                                    group[old_index].add(old_index);
+                                }
+                            }
+
+                        })(j, _temps, ii);
+                    }
+                })(i)
+            }
+
+            // 组的处理 --- 进行组的合并
+            console.info(group_count);
+            //特殊处理最后一个
+            group[group_count - 1] = new Set();
+            group[group_count - 1].add(group_count - 1);
+            for (var i = 0; i < group_count - 1; i++) {
+                for (var j = i + 1; j < group_count; j++) {
+                    if (group[i] && group[j]) {
+                        // 不能直接 new Set(group[i]) 会出现引用问题
+                        var temp_set = new Set();
+                        group[i].forEach(function (element, sameElement, set) {
+                            temp_set.add(element);
+                        });
+                        group[j].forEach(function (element, sameElement, set) {
+                            temp_set.add(element);
+                        });
+                        // 判断大小
+                        if (temp_set.size < group[i].size + group[j].size) {
+                            group[i] = temp_set;
+                            group[j] = null;
+                            i--;
+                            break;
+                        } else {
+
+                        }
+                    }
+                }
+            }
+            console.info('group--------');
+            console.info(group);
+            // 分组完成以后给对应的 dom class，然后wrap
+            var group_no = 0;
+            for (var i = 0; i < group_count; i++) {
+                (function (index) {
+                    if (group[index]) {
+                        var tmep_set_g = new Set();//存放group对应的 关键词组id
+                        group[i].forEach(function (element, sameElement, set) {
+                            // 问题1
+                            var temp_id = element;
+                            tags_temp_id[temp_id]['obj'].addClass(group_attr + index);
+                            tags_temp_id[temp_id]['obj'].attr(group_attr, index);
+
+                            var temp = tags_temp_id[element]['temps'];
+                            if(temp){
+                                for (var j = 0; j < temp.length; j++) {
+                                    var _gid = $('kk[temp_id=' + temp[j] + ']').eq(0).attr('key_group');
+                                    console.info(_gid);
+                                    tmep_set_g.add(_gid);
+                                }
+                            }
+
+                        });
+                        group_no++;
+
+                        _data['group_gid'][index] = tmep_set_g;
+
+                    }
+                })(i);
+            }
+            console.info(group_no);
+            console.info(_data['group_gid']);
+
+            for (var i = 0; i < group_count; i++) {
+                (function (index) {
+                    $('.' + group_attr + index).wrapAll('<' + group_tag + ' data-id="' + index + '"></' + group_tag + '>');
+                })(i)
+            }
+            _data['group'] = group;
+
+        } // end if
+    }
+
+    /**
+     *  事件绑定
+     */
+    $(".keygroup").on("click", function (e) {
+        e.stopPropagation();
+        var current_gruop = $(this)[0].id;
+        current_group_id = current_gruop;
+        var el = $("kk[key_group=" + current_gruop + "]");
+        $('kk').css({
+            'background': 'transparent'
+        });
+        for (var i = 0; i < el.length; i++) {
+            var isdel = el[i].getAttribute("isdel");
+            if(isdel && isdel == '1'){
+                console.info('is del');
+            }else{
+                el[i].style.background = el[i].getAttribute("key_type") === "secondary" ? "red" : "green";
+            }
+        }
+    });
+    // 点击显示
+    $(document).on('mouseover', group_tag, function (e) {
+        e.stopPropagation();
+        if(current_group_id){
+            var groupid = $(this).attr('data-id');
+            var g_set = _data['group_gid'][groupid];
+            var has_g = false; // 这个group中是否包含了当前的关键词组
+            g_set.forEach(function (element, sameElement, set) {
+                if(element === current_group_id){
+                    has_g = true;
+                }
+            });
+
+            if(has_g){
+                var kk_list = $('.' + group_attr + groupid);
+                var kk_set = new Set();
+                var kk_tempid_set = new Set();
+
+                /*
+                 方法2： group 反向获取到 tempid的 set 集合
+                 */
+                var group_temp = _data['group'][groupid];
+                var tempid_result = new Set();
+                if (group_temp) {
+                    group_temp.forEach(function (element, sameElement, set) {
+                        var tempid_temp = _data['tags_temp_id'][element];
+                        if (tempid_temp) {
+                            var temp_arr = tempid_temp['temps'];
+                            if (temp_arr) {
+                                for (var i = 0; i < temp_arr.length; i++) {
+                                    tempid_result.add(temp_arr[i]);
+                                }
+                            }
+                        }
+                    });
+                }
+                console.info('这个分组中获取到的 tempid有：');
+                console.info(tempid_result);
+
+
+                $('#del').empty();
+
+                // 获取 temp id ,kk_tempid_set 是第一种方式获取的，通过dom的 group，name重复关键词时候不全
+                console.info('获取到的tempid为：');
+                console.info(kk_tempid_set);
+
+
+                tempid_result.forEach(function (element, sameElement, set) {
+                    console.info(element);
+                    var obj = $('kk[temp_id=' + element + ']').eq(0);
+                    var isdel = obj.attr('isdel');
+                    var g_id = obj.attr('key_group');
+                    if(isdel && isdel === '1'){
+
+                    }else{
+                        if(g_id && g_id == current_group_id){
+                            // 展示的是当前组的，没有标记删除的
+                            var temp_id = element;
+                            var key = obj.attr('key');
+                            var group_id = obj.attr(group_attr);
+                            // 原始文件结构修复了，name这里就好处理
+                            var type = obj.attr('key_type');
+                            var key_group = obj.attr('key_group');
+                            var temp_index = key_group + '-' + key;
+
+                            var name = temp_key[type][temp_index]['name'];
+
+                            //创建对应的 dom
+                            var dom = '<div class="del_dom" key="' + key + '" tempid="' + temp_id + '" group="' + group_id + '">' +
+                                name + '</div>';
+                            $('#del').append(dom);
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // 选择删除
+    $('#del').on('click', '.del_dom', function (e) {
+        e.stopPropagation();
+        var temp_id = $(this).attr('tempid');
+        if (temp_id) {
+            var list = $('kk[temp_id=' + temp_id + ']');
+            list.css({
+                'background': 'transparent'
+            });
+            list.attr('isdel', 1);
+        }
+        $(this).remove();
+    });
+
+    // 删除关键词组
+    $('body').on('click', '.del_group', function (e) {
+        e.stopPropagation();
+        var group_id = $(this).attr('gid');
+        var list = $('kk[key_group=' + group_id + ']');
+        list.css({
+            'background': 'transparent'
+        });
+        list.attr('isdel', 1);
+    })
+</script>
+</body>
+
+</html>

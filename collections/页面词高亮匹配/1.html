@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-1.10.2.js"></script>
+</head>
+<body>
+<span>十里春风不如你啊十里</span>
+<span>不</span>
+<span>十里春风不如你啊</span>
+<button id="test">关键词匹配</button>
+
+<div id="del">
+
+</div>
+<script>
+
+    $(function () {
+        bindEvent();
+    });
+
+    var but = document.getElementById('test');
+    var temp = {
+        "id": 1,
+        "name": "哼哼",
+        "primary": [
+            {"id": 6, "name": "里 不",color:'grey'},
+            {"id": 5, "name": "你啊十里",color:'grey'},
+            {"id": 4, "name": "里春风",color:'yellow'},
+            {"id": 3, "name": "春风不",color:'green'},
+            {"id": 2, "name": "里春风",color:'green'},
+            {"id": 1, "name": "十里春",color:'red'}
+        ]
+    };
+
+    /*
+
+     {
+     "primary": {
+     "6": {
+     "name": "春风不",
+     "color": "green"
+     },
+     "7": {
+     "name": "春风不",
+     "color": "green"
+     },
+     }
+     }
+     */
+    // 数据格式的转存
+    var temp_primary = {};
+    var primary = temp['primary'];
+    if(primary){
+        for (var i = 0; i < primary.length; i++) {
+            var obj = primary[i];
+            temp_primary[obj['id']] = obj
+        }
+    }
+
+    // group 分组信息，以及 tempid 分组信息的全局
+    var _data = {
+        'group': null,
+        'tags_temp_id': null
+    };
+    var group_tag = 'kk_group';
+    var group_attr = 'group';
+
+
+    var range, bookmark;
+    // document.designMode = "on";
+    if (document.createRange) {
+        range = document.createRange();
+    } else {
+        range = document.body.createTextRange();
+        bookmark = range.getBookmark();
+    }
+    var total = 0;
+    but.addEventListener('click', function () {
+        for (var i = 0; key = temp['primary'][i]; i++) {
+            // range.removeRange(range);
+            var key;
+            if (range.findText) {
+                range.collapse(true);
+                range.moveToBookmark(bookmark);
+                while (range.findText(key.name)) {
+                    range.pasteHTML(range.text.fontcolor(key.color));
+                }
+            } else {
+                var selection;
+                selection = window.getSelection();
+                // selection.removeAllRanges();
+
+                selection.collapse(document.body, 0);
+                var findNull = 0;
+                // while (selection.text) {
+                while (window.find(key.name) || window.find(key.name.replace(/(.{1})/g, '$1 '))) {
+                    total++;
+                    window.scrollTo(0, (document.body.scrollHeight));
+
+                    var node = document.createElement("kk");
+                    node.style.background = key.color;
+                    node.setAttribute('key', key.id);
+                    node.setAttribute('temp_id', total);
+
+                    console.info('===================', selection.getRangeAt(0));
+                    var range1 = window.getSelection().getRangeAt(0);
+
+                    node.appendChild(range1.extractContents());
+                    range1.insertNode(node);
+
+
+                    if (node.innerText === '') {
+                        findNull++;
+                        if (findNull > 10) {
+                            findNull = 0;
+                            break;
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    // if (key.name === node.innerText.replace(/ |　/g, '')) {
+                    //     console.info(111);
+                    // }
+                }
+            }
+        }
+
+        groupFun(total);
+    });
+
+
+    /**
+     *  合并一起的标签进行tag，鼠标展示方式
+     * @param total 临时匹配总数
+     */
+    function groupFun(total){
+        var group_count = 0; //标记组的 id，展示每一组对应的 temp_id
+
+        /*
+         if(total > 0){
+
+         for (var i = 0; i < total; i++) {
+         var _self = $('kk[temp_id='+ i +']');
+         check(_self, group_count);
+         group_count++;
+         } //end for
+         }  //end if
+         */
+
+        /*
+         从dom直接获取，name获取的都是顶层的节点，然后处理 group 之间的关系： 查询子类，或者本身是否有 temp_id 相等的别的节点，那么存在的顶层的父类直接就是相关性的
+         */
+
+        if(total > 0) {
+            var all = $('kk');
+            var list = [];
+            if(all){
+                for (var i = 0; i < all.length; i++) {
+                    var obj = all.eq(i);
+                    var p = obj.parent('kk');
+                    if(p && p.length > 0){
+                        console.info(obj.attr('temp_id') + '---' + obj.attr('key'));
+                    }else{
+                        list.push(obj);
+                    }
+                }
+            }
+            console.info(list);
+
+            console.info('temp_id  ----  key');
+            var tag_top = $('kk').eq(0).parent();
+            var tags = list;
+            var tags_temp_id = {}; // 存放group对应的所有的 temp_id
+            /*
+             tags_temp_id = {
+             gid:{
+             obj: obj
+             temps:[]
+             }
+             }
+
+             */
+
+            for (var i = 0; i < tags.length; i++) {
+                (function (index) {
+
+                    var obj = tags[index];
+                    var _temp_id = obj.attr('temp_id');
+                    var _key = obj.attr('key');
+                    console.info(_temp_id + " ---  " + _key);
+
+                    tags_temp_id[group_count] = {};
+                    tags_temp_id[group_count]['obj'] = obj;
+
+                    // (1) 使用数组进行记录，那么会有重复的数据 --- 方便调试
+                    var temp_ids = [];
+                    temp_ids.push(_temp_id);
+
+                    // (2) 使用set进行 tempid的记录，后期做关联时候的处理
+                    var temp_ids_set = new Set();
+                    temp_ids_set.add(_temp_id);
+
+                    var _childs = obj.find('kk');
+                    if(_childs && _childs.length > 0){
+                        for (var j = 0; j < _childs.length; j++) {
+                            var temp_obj = _childs.eq(j);
+                            temp_ids.push(temp_obj.attr('temp_id'));
+                            temp_ids_set.add(temp_obj.attr('temp_id'));
+                        }
+                    }
+                    tags_temp_id[group_count]['temps'] = temp_ids;
+                    tags_temp_id[group_count]['sets'] = temp_ids_set;
+
+                    group_count++;
+                })(i);
+
+            } // end for
+
+            console.info(tags_temp_id);
+            console.info('---------');
+            _data['tags_temp_id'] = tags_temp_id;
+
+            var group = {}; // 记录group之间的关系，最后进行合并
+
+            //父类进行分组,对比每组的 temps ，进行检查是否有合并
+            // 特殊处理最后一个
+            group[group_count - 1] = new Set();
+            group[group_count - 1].add(group_count - 1);
+            /*            for (var i = 0; i < group_count - 1; i++) {
+             (function(ii){
+             var _temps = tags_temp_id[ii]['temps'];
+             for (var j = ii + 1; j < group_count; j++) {
+             (function (jj, old_arr, old_index) {
+             var _new_temps = tags_temp_id[jj]['temps'];
+             var _set = new Set(_new_temps);
+             for (var g = 0; g < old_arr.length; g++) {
+             _set.add(old_arr[g]);
+             }
+
+             if(_set.size < (_new_temps.length + old_arr.length)){
+             console.info(old_index + ' 和 ' + jj + '有关联');
+             var _temp_group = group[old_index];
+             if(_temp_group){
+             group[old_index].add(old_index);
+             group[old_index].add(jj);
+             }else{
+             group[old_index] = new Set();
+             group[old_index].add(old_index);
+             group[old_index].add(jj);
+             }
+             }else{
+             var _temp_group = group[old_index];
+             if(!_temp_group){
+             group[old_index] = new Set();
+             group[old_index].add(old_index);
+             }
+             }
+             })(j, _temps, ii);
+             }
+             })(i)
+             }*/
+
+            for (var i = 0; i < group_count - 1; i++) {
+                (function(ii){
+                    var _temps = tags_temp_id[ii]['sets'];
+                    for (var j = ii + 1; j < group_count; j++) {
+                        (function (jj, oldset, old_index) {
+                            var _temp_set = new Set();
+                            var _new_temps = tags_temp_id[jj]['sets'];
+                            _new_temps.forEach(function (element, sameElement, set) {
+                                _temp_set.add(element);
+                            });
+                            oldset.forEach(function (element, sameElement, set) {
+                                _temp_set.add(element);
+                            });
+
+                            if(_temp_set.size < (_new_temps.size + oldset.size)){
+                                console.info(old_index + ' 和 ' + jj + '有关联');
+                                var _temp_group = group[old_index];
+                                if(_temp_group){
+                                    group[old_index].add(old_index);
+                                    group[old_index].add(jj);
+                                }else{
+                                    group[old_index] = new Set();
+                                    group[old_index].add(old_index);
+                                    group[old_index].add(jj);
+                                }
+                            }else{
+                                var _temp_group = group[old_index];
+                                if(!_temp_group){
+                                    group[old_index] = new Set();
+                                    group[old_index].add(old_index);
+                                }
+                            }
+
+                        })(j, _temps, ii);
+                    }
+                })(i)
+            }
+
+            // 组的处理 --- 进行组的合并
+            console.info(group_count);
+            //特殊处理最后一个
+            group[group_count - 1] = new Set();
+            group[group_count - 1].add(group_count - 1);
+            for (var i = 0; i < group_count - 1; i++) {
+                for (var j = i + 1; j < group_count; j++) {
+                    if(group[i] && group[j]){
+                        // 不能直接 new Set(group[i]) 会出现引用问题
+                        var temp_set = new Set();
+                        group[i].forEach(function (element, sameElement, set) {
+                            temp_set.add(element);
+                        });
+                        group[j].forEach(function (element, sameElement, set) {
+                            temp_set.add(element);
+                        });
+                        // 判断大小
+                        if(temp_set.size < group[i].size + group[j].size ){
+                            group[i] = temp_set;
+                            group[j] = null;
+                            i--;
+                            break;
+                        }else{
+
+                        }
+                    }
+                }
+            }
+            console.info('group--------');
+            console.info(group);
+            // 分组完成以后给对应的 dom class，然后wrap
+            var group_no = 0;
+            for (var i = 0; i < group_count; i++) {
+                if(group[i]){
+                    group[i].forEach(function (element, sameElement, set) {
+                        // 问题1
+                        var temp_id = element;
+                        tags_temp_id[temp_id]['obj'].addClass(group_attr + i);
+                        tags_temp_id[temp_id]['obj'].attr(group_attr,i);
+                    });
+                    group_no++;
+                }
+            }
+            console.info(group_no);
+            for (var i = 0; i < group_count; i++) {
+                (function(index){
+                    $('.'+ group_attr +index).wrapAll('<'+ group_tag +' data-id="'+ index +'"></'+ group_tag +'>');
+                })(i)
+            }
+
+            _data['group'] = group;
+
+        }// end if
+    }
+
+    /**
+     *   判断dom并且进行 group 标记
+     * @param obj  需要查询的 dom
+     * @param gindex  组编号
+     */
+    function check(obj, gindex){
+
+        obj.attr('group', gindex);
+        // 覆盖部分已存在的标记时候，会包裹原始的tag， 所以获取当前的，查找子类进行关联
+        var _children  = obj.find('kk');
+        if(_children){
+            for (var i = 0; i < _children.length; i++) {
+                (function(index){
+                    var _temp_c = _children.eq(index);
+                    _temp_c.attr('group',gindex);
+
+                    //查询这个子类temp_id 对应的其他的节点的标记
+                    // 递归进行检查
+                    check(_temp_c, gindex);
+                })(i)
+            }
+        }else{
+            // 可能会出现bug进行死循环 -- 这里出栈需要检测
+//            return;
+        }
+
+    }
+
+
+    /**
+     *  事件绑定
+     */
+    function bindEvent() {
+        // 点击显示
+        $(document).on('click', group_tag, function (e) {
+            e.stopPropagation();
+            var groupid = $(this).attr('data-id');
+
+            var kk_list = $('.' + group_attr + groupid);
+            var kk_set = new Set();
+            var kk_tempid_set = new Set();
+            /*
+             方式1 ： 获取选中的group的包含的 tempid
+             从 dom 中进行获取，但是内部包含的dom是没有将标记的，可以在"问题"出进行code查看
+             */
+            if (kk_list.length > 0) {
+                for (var i = 0; i < kk_list.length; i++) {
+                    var obj = kk_list.eq(i);
+                    kk_set.add(obj.attr('key'));
+                    kk_tempid_set.add(obj.attr('temp_id'));
+                }
+            }
+
+            /*
+             方法2： group 反向获取到 tempid的 set 集合
+             */
+            var group_temp = _data['group'][groupid];
+            var tempid_result = new Set();
+            if(group_temp){
+                group_temp.forEach(function (element, sameElement, set) {
+                    var tempid_temp = _data['tags_temp_id'][element];
+                    if(tempid_temp){
+                        var temp_arr = tempid_temp['temps'];
+                        if(temp_arr){
+                            for (var i = 0; i < temp_arr.length; i++) {
+                                tempid_result.add(temp_arr[i]);
+                            }
+                        }
+                    }
+                });
+            }
+            console.info('这个分组中获取到的 tempid有：');
+            console.info(tempid_result);
+
+            // 获取 id 和 name ---- 此处后面没有使用， 只是 console 显示信息
+            kk_set.forEach(function (element, sameElement, set) {
+                var obj = temp_primary[element];
+                console.info(obj);
+            });
+
+            $('#del').empty();
+
+            // 获取 temp id ,kk_tempid_set 是第一种方式获取的，通过dom的 group，name重复关键词时候不全
+            console.info('获取到的tempid为：');
+            console.info(kk_tempid_set);
+
+
+            tempid_result.forEach(function (element, sameElement, set) {
+                console.info(element);
+                var obj = $('kk[temp_id=' + element + ']').eq(0);
+                var temp_id = element;
+                var key = obj.attr('key');
+                var group_id = obj.attr(group_attr);
+                // 原始文件结构修复了，name这里就好处理
+                var name = temp_primary[key]['name'];
+
+                //创建对应的 dom
+                var dom = '<div class="del_dom" key="' + key + '" tempid="' + temp_id + '" group="' + group_id + '">' + name + '</div>';
+                $('#del').append(dom);
+            });
+        });
+
+        // 选择删除
+        $('#del').on('click','.del_dom',function(e){
+            e.stopPropagation();
+            var temp_id = $(this).attr('tempid');
+            if(temp_id){
+                var list = $('kk[temp_id=' + temp_id + ']');
+                for (var i = 0; i < list.length; i++) {
+                    list.eq(i).css({
+                        'background':'transparent'
+                    })
+                }
+            }
+            $(this).remove();
+        })
+    }
+</script>
+</body>
+</html>
