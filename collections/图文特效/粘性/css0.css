@@ -1,0 +1,306 @@
+
+
+/*
+@function randomNum(c, $min: 0) {
+@return ($min + random($max));
+}
+*/
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+body {
+    height: 0;
+}
+/*增亮图片*/
+#a123 {
+    width: 300px;
+    height: 240px;
+    margin: 0 auto;
+    background-image:url(img/20170921215000.png);
+}
+#a123:hover {
+    cursor: pointer;
+    transition: filter .3s;
+    filter: brightness(1.5) contrast(150%);
+}
+h1,p {
+    color: white;
+}
+p {
+    font-size: 18px;
+}
+
+/*渐变色或者说是颜色丰富的阴影效果*/
+
+.container2 {
+    width: 200px;
+    margin: 20px auto;
+}
+
+.avator {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: url(img/30325717-52d0fc70-97f8-11e7-8d08-dbb960c85118.png) no-repeat center center;
+    background-size: 100% 100%;
+    margin: 0 auto;
+}
+
+.avator::after {
+    content: "";
+    position: absolute;
+    top: 6%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    background-size: 100% 100%;
+    border-radius: 50%;
+    transform: scale(.95);
+    filter: blur(10px) brightness(80%) opacity(.8);
+    z-index: -1;
+}
+
+
+p {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 18px;
+    font-family: Righteous;
+}
+
+/*blur 混合 contrast 产生融合效果*/
+.container3 {
+    width: 100%;
+    height: 220px;
+    position: relative;
+    padding: 2em;
+    filter: contrast(20);
+    background-color: black;
+    overflow: hidden;
+}
+.filter-mix {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 200px;
+    filter: contrast(20);
+    background: #fff;
+}
+
+.filter-mix::before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #333;
+    top: 40px;
+    left: 40px;
+    z-index: 2;
+    filter: blur(6px);
+    box-sizing: border-box;
+    animation: filterBallMove 4s ease-out infinite;
+}
+
+.filter-mix::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #3F51B5;
+    top: 60px;
+    right: 40px;
+    z-index: 2;
+    filter: blur(6px);
+    animation: filterBallMove2 4s ease-out infinite;
+}
+
+@keyframes filterBallMove {
+    50% {
+        left: 140px;
+    }
+}
+
+@keyframes filterBallMove2 {
+    50% {
+        right: 140px;
+    }
+}
+
+/*燃烧的火焰*/
+.fire {
+    width: 0;
+    height: 0;
+    border-radius: 45%;
+    box-sizing: border-box;
+    border: 100px solid #000;
+    border-bottom: 100px solid transparent;
+    /*background-color: #b5932f;
+    transform: scaleX(.4);
+    filter: blur(20px) contrast(30);*/
+}
+:root {
+    --fireWidth: 115px;
+    --fireHeight: 200px;
+    --dotSize: 24px;
+    --fireColor: #b5932f;
+// --fireColor: #008eff;
+// --fireColor: #ff9900;
+
+}
+
+.g-container {
+    position: relative;
+    width: 384px;
+    height: 300px;
+    margin: 0 auto;
+    background-color: #000;
+}
+
+.g-fire {
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: 100px;
+    left: 50%;
+    border-radius: 45%;
+    box-sizing: border-box;
+    border: 200px solid #000;
+    border-bottom: 200px solid transparent;
+    transform: translate(-50%, 0) scaleX(.4);
+    background-color: #b5932f;
+    filter: blur(20px) contrast(30);
+}
+
+.g-dot {
+    position: absolute;
+    bottom: -210px;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background: #000;
+    border-radius: 50%;
+    animation: move 2s infinite 6s linear;
+}
+
+@keyframes move {
+    100% {
+        transform: translate3d(0, -350px, 0);
+    }
+}
+
+/*文字融合*/
+#a05 {
+    margin-top: 200px;
+}
+.container {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    padding: 2em;
+    filter: contrast(20);
+    background-color: black;
+    overflow: hidden;
+}
+
+.container h1 {
+    font-family: Righteous;
+    color: white;
+    font-size: 5rem;
+    text-transform: uppercase;
+    line-height: 1;
+    animation: letterspacing 4s infinite alternate ease-in-out;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    letter-spacing: -3.2rem;
+}
+
+@keyframes letterspacing {
+    0% {
+        letter-spacing: -3.2rem;
+        filter: blur(.5rem);
+    }
+
+    25% {
+        filter: blur(.6rem);
+    }
+
+    50% {
+        filter: blur(.8rem);
+    }
+
+    75% {
+        filter: blur(.3rem);
+    }
+
+    100% {
+        letter-spacing: 0rem;
+        filter: blur(0rem);
+        color: #fff;
+    }
+}
+
+:root {
+    --fireWidth: 115px;
+    --fireHeight: 200px;
+    --dotSize: 24px;
+    --fireColor: #b5932f;
+// --fireColor: #008eff;
+// --fireColor: #ff9900;
+
+}
+
+.g-container {
+    position: relative;
+    width: 384px;
+    height: 300px;
+    margin: 0 auto;
+    background-color: #000;
+}
+
+.g-fire {
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: 100px;
+    left: 50%;
+    border-radius: 45%;
+    box-sizing: border-box;
+    border: 200px solid #000;
+    border-bottom: 200px solid transparent;
+    transform: translate(-50%, 0) scaleX(.4);
+    background-color: #b5932f;
+    filter: blur(20px) contrast(30);
+}
+
+.g-dot {
+    position: absolute;
+    bottom: -210px;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background: #000;
+    border-radius: 50%;
+}
+
+@keyframes move {
+    100% {
+        transform: translate3d(0, -350px, 0);
+    }
+}

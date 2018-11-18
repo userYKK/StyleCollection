@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="css/2.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../collections/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/jquery.dotdotdot.js"></script>
+    <script type="text/javascript">
+        $(function(){
+
+            // api 可以直接调用一些方法
+            var API = $(".ellipsis").dotdotdot({
+                //这里中文要用letter
+                wrap: 'letter',
+
+                /* 截断文本后调用的函数
+                 在这个函数里，“this”是指该元素 */
+                callback: function( isTruncated ) {},
+
+                /* 添加的文本为省略号 */
+                ellipsis: "\u2026 ",
+
+                /* 元素的（最大）高度:
+                 null: 判断CSS (max-)的高度;
+                 number: 设置一个固定的高度;
+                 "watch": 重新判断“watch”中的CSS (max-)的高度;  */
+                height: null,
+
+                /* jQuery选择器的元素保存在省略号之后. */
+                keep: null,
+
+                /* 判断元素高度的偏差. */
+                tolerance: 0,
+
+                /* 如何截断文本: 根据 "node"/节点, "word"/单词 或者 "letter"/字母. */
+                truncate: "word",
+
+                /* 是否更新省略号:
+                 true: 监测元素的宽度和高度;
+                 "window": 检测窗口的宽度和高度. */
+                watch: "window"
+
+            }).data( "dotdotdot" );
+
+            /* 返回Class实例。 */
+//            API.getInstance();
+
+            /* 开始截断过程。 */
+//            API.truncate();
+
+            /* 恢复原始内容。 */
+//            API.restore();
+
+            /* 完全恢复元素到它的pre-init状态。 */
+//            API.destroy();
+
+            /* 开始监视包装器或窗口的宽度和高度。 */
+//            API.watch();
+
+            /* 停止监视包装器或窗口的宽度和高度。 */
+//            API.unwatch();
+
+        })
+    </script>
+</head>
+<body>
+
+<fieldset>
+    <legend>jquery 插件的使用</legend>
+    <div class="ellipsis">
+        这时我看见他的背影，我的泪很快地流下来了。我赶紧拭干了泪。怕他看见，也怕别人看见。
+        我再向外看时，他已抱了朱红的橘子往回走了。过铁道时，他先将橘子散放在地上，自己慢慢爬下，再抱起橘子走。
+        到这边时，我赶紧去搀他。他和我走到车上，将橘子一股脑儿放在我的皮大衣上。于是扑扑衣上的泥土，心里很轻松似的。
+        过一会儿说：“我走了，到那边来信！”我望着他走出去。他走了几步，回过头看见我，说：“进去吧，里边没人。”等他的背影混入来来往往的人里，
+        再找不着了，我便进来坐下，我的眼泪又来了。
+    </div>
+</fieldset>
+
+</body>
+</html>
